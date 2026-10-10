@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP Birim İş Takip Sistemi</title>
+<style>
+:root {
+  --primary: #1a56db;
+  --primary-dark: #1342a8;
+  --success: #057a55;
+  --danger: #c81e1e;
+  --warning: #c27803;
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --sidebar-w: 220px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: #1e293b; color: #e2e8f0; display: flex; flex-direction: column; flex-shrink: 0; position: fixed; height: 100vh; overflow-y: auto; }
+.sidebar-logo { padding: 20px 16px 12px; border-bottom: 1px solid #334155; }
+.sidebar-logo h2 { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.4; }
+.sidebar-logo p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+.nav-section { padding: 12px 8px 4px; font-size: 10px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 6px; margin: 1px 8px; cursor: pointer; font-size: 13px; color: #cbd5e1; transition: all .15s; }
+.nav-item:hover { background: #334155; color: #fff; }
+.nav-item.active { background: var(--primary); color: #fff; }
+.nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+
+/* MAIN */
+.main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+.topbar h1 { font-size: 16px; font-weight: 600; }
+.content { padding: 24px; flex: 1; }
+
+/* CONFIG */
+#api-config { background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+#api-config h3 { font-size: 13px; font-weight: 600; color: #92400e; margin-bottom: 8px; }
+#api-config input { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; margin-bottom: 8px; }
+#api-config button { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+.card-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+.stat-val { font-size: 24px; font-weight: 700; color: var(--primary); }
+.stat-lbl { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* FORM */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.span2 { grid-column: span 2; }
+.form-group.span3 { grid-column: span 3; }
+label { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+input, select, textarea { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; background: #fff; }
+textarea { resize: vertical; min-height: 60px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,219,.1); }
+
+/* BUTTONS */
+.btn { padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-success { background: var(--success); color: #fff; }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--bg); }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--bg); padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:hover td { background: #f9fafb; }
+
+/* BADGE */
+.badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; }
+.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-green { background: #d1fae5; color: #065f46; }
+.badge-yellow { background: #fef3c7; color: #92400e; }
+.badge-red { background: #fee2e2; color: #991b1b; }
+.badge-gray { background: #f3f4f6; color: #374151; }
+
+/* AKTIF LOG */
+.active-log { background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.active-log-info h4 { font-size: 14px; font-weight: 600; color: #065f46; }
+.active-log-info p { font-size: 12px; color: #047857; margin-top: 2px; }
+.timer { font-size: 22px; font-weight: 700; color: #059669; font-variant-numeric: tabular-nums; }
+
+/* RAPOR */
+.rapor-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.rapor-bar-label { font-size: 13px; min-width: 160px; }
+.rapor-bar-track { flex: 1; background: var(--bg); border-radius: 99px; height: 10px; overflow: hidden; }
+.rapor-bar-fill { height: 100%; border-radius: 99px; background: var(--primary); }
+.rapor-bar-val { font-size: 13px; font-weight: 500; min-width: 70px; text-align: right; color: var(--text-secondary); }
+
+.hidden { display: none !important; }
+.loading { text-align: center; padding: 40px; color: var(--text-secondary); }
+.alert { padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; }
+.alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+.alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+.section-actions { display: flex; gap: 8px; align-items: center; }
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h2>ERP Birim<br>İş Takip</h2>
+    <p>v1.0</p>
+  </div>
+  <div class="nav-section">Ana Menü</div>
+  <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
+  <div class="nav-item" onclick="showPage('log')"><span class="icon">⏱️</span> İş Logu</div>
+  <div class="nav-item" onclick="showPage('projeler')"><span class="icon">📁</span> Projeler</div>
+  <div class="nav-item" onclick="showPage('rapor')"><span class="icon">📈</span> Raporlama</div>
+  <div class="nav-section">Tanımlar</div>
+  <div class="nav-item" onclick="showPage('birimler')"><span class="icon">🏢</span> Birimler</div>
+  <div class="nav-item" onclick="showPage('personel')"><span class="icon">👤</span> Personel</div>
+  <div class="nav-section">Ayarlar</div>
+  <div class="nav-item" onclick="showPage('ayarlar')"><span class="icon">⚙️</span> API Ayarları</div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <h1 id="page-title">Dashboard</h1>
+    <div style="font-size:12px;color:var(--text-secondary)" id="current-user-display"></div>
+  </div>
+  <div class="content">
+    <div id="alert-box" class="hidden"></div>
+
+    <!-- AYARLAR -->
+    <div id="page-ayarlar" class="hidden">
+      <div class="card">
+        <div class="card-title">⚙️ API Ayarları</div>
+        <div class="form-group" style="max-width:600px">
+          <label>Google Apps Script Web App URL</label>
+          <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/..." />
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" onclick="saveApiUrl()">Kaydet</button>
+        </div>
+        <div class="divider"></div>
+        <p style="font-size:13px;color:var(--text-secondary)">Bu URL'yi Google Apps Script'ten "Web App olarak dağıt" adımından alabilirsiniz. Kurulum talimatları için README dosyasına bakın.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">👤 Aktif Kullanıcı</div>
+        <div class="form-group" style="max-width:400px">
+          <label>Bu cihazda çalışan personeli seçin</label>
+          <select id="active-personel-select" onchange="saveActivePersonel()">
+            <option value="">-- Personel Seçin --</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard">
+      <div class="stat-grid" id="dash-stats"></div>
+      <div class="card">
+        <div class="card-title">⏱️ Aktif Çalışmalar</div>
+        <div id="aktif-loglar"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Son Loglar (Bu hafta)</div>
+        <div class="table-wrap">
+          <table id="son-loglar-table">
+            <thead><tr><th>Tarih</th><th>Personel</th><th>Proje/Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
+            <tbody id="son-loglar-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- İŞ LOGU -->
+    <div id="page-log" class="hidden">
+      <div class="card">
+        <div class="card-title">➕ Yeni İş Logu Ekle</div>
+        <div class="form-grid cols3">
+          <div class="form-group">
+            <label>Personel *</label>
+            <select id="log-personel"></select>
+          </div>
+          <div class="form-group">
+            <label>Proje</label>
+            <select id="log-proje"><option value="">-- Günlük İş --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Birim *</label>
+            <select id="log-birim"><option value="">-- Seçin --</option></select>
+          </div>
+          <div class="form-group span3">
+            <label>Başlık *</label>
+            <input type="text" id="log-baslik" placeholder="Yapılan işin kısa açıklaması" />
+          </div>
+          <div class="form-group span3">
+            <label>Açıklama</label>
+            <textarea id="log-aciklama" placeholder="Detaylı açıklama (isteğe bağlı)"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Başlangıç *</label>
+            <input type="datetime-local" id="log-baslangic" />
+          </div>
+          <div class="form-group">
+            <label>Bitiş (boş = devam ediyor)</label>
+            <input type="datetime-local" id="log-bitis" />
+          </div>
+          <div class="form-group" style="justify-content:flex-end;flex-direction:row;align-items:flex-end;gap:8px">
+            <button class="btn btn-primary" onclick="addLog()">💾 Kaydet</button>
+            <button class="btn btn-outline" onclick="setNow('log-baslangic')">Şimdi Başladım</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="justify-content:space-between">
+          <span>📋 Tüm Loglar</span>
+          <div class="section-actions">
+            <select id="filter-personel" onchange="loadLoglar()" style="font-size:12px;padding:4px 8px">
+              <option value="">Tüm Personel</option>
+            </select>
+            <select id="filter-proje" onchange="loadLoglar()" style="font-size:12px;padding:4px 8px">
+              <option value="">Tüm Projeler</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tarih</th><th>Personel</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead>
+            <tbody id="log-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJELER -->
+    <div id="page-projeler" class="hidden">
+      <div class="card">
+        <div class="card-title">➕ Yeni Proje</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Proje Adı *</label>
+            <input type="text" id="proje-ad" placeholder="Proje adı" />
+          </div>
+          <div class="form-group">
+            <label>Tip *</label>
+            <select id="proje-tip">
+              <option value="Geliştirme">Geliştirme</option>
+              <option value="Günlük İş">Günlük İş</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Talep Eden Birim</label>
+            <select id="proje-birim"><option value="">-- Seçin --</option></select>
+          </div>
+          <div class="form-group">
+            <label>Durum</label>
+            <select id="proje-durum">
+              <option value="Aktif">Aktif</option>
+              <option value="Beklemede">Beklemede</option>
+              <option value="Tamamlandı">Tamamlandı</option>
+            </select>
+          </div>
+          <div class="form-group span2">
+            <label>Açıklama</label>
+            <textarea id="proje-aciklama" placeholder="Proje detayları"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" onclick="addProje()">💾 Projeyi Kaydet</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📁 Projeler</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Proje Adı</th><th>Tip</th><th>Birim</th><th>Durum</th><th>Açıklama</th><th>İşlem</th></tr></thead>
+            <tbody id="proje-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- RAPOR -->
+    <div id="page-rapor" class="hidden">
+      <div class="card">
+        <div class="card-title">🔍 Rapor Filtresi</div>
+        <div class="form-grid cols3">
+          <div class="form-group">
+            <label>Başlangıç Tarihi</label>
+            <input type="date" id="rapor-baslangic" />
+          </div>
+          <div class="form-group">
+            <label>Bitiş Tarihi</label>
+            <input type="date" id="rapor-bitis" />
+          </div>
+          <div class="form-group">
+            <label>Birim</label>
+            <select id="rapor-birim"><option value="">Tümü</option></select>
+          </div>
+          <div class="form-group">
+            <label>Personel</label>
+            <select id="rapor-personel"><option value="">Tümü</option></select>
+          </div>
+          <div class="form-group">
+            <label>Proje</label>
+            <select id="rapor-proje"><option value="">Tümü</option></select>
+          </div>
+          <div class="form-group" style="justify-content:flex-end;flex-direction:row;align-items:flex-end">
+            <button class="btn btn-primary" onclick="loadRapor()">📊 Raporu Getir</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="rapor-result" class="hidden">
+        <div class="stat-grid" id="rapor-stats"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-title">🏢 Birim Bazlı Süre</div>
+            <div id="rapor-birim-chart"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">👤 Personel Bazlı Süre</div>
+            <div id="rapor-personel-chart"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📁 Proje Bazlı Süre</div>
+          <div id="rapor-proje-chart"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Detay Listesi</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Tarih</th><th>Personel</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
+              <tbody id="rapor-detay-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BİRİMLER -->
+    <div id="page-birimler" class="hidden">
+      <div class="card">
+        <div class="card-title">➕ Yeni Birim Ekle</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Birim Adı *</label>
+            <input type="text" id="birim-ad" placeholder="Örn: Muhasebe, Satın Alma..." />
+          </div>
+          <div class="form-group">
+            <label>Açıklama</label>
+            <input type="text" id="birim-aciklama" placeholder="Kısa açıklama" />
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" onclick="addBirim()">💾 Birimi Kaydet</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏢 Birimler</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Birim Adı</th><th>Açıklama</th><th>İşlem</th></tr></thead>
+            <tbody id="birim-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSONEL -->
+    <div id="page-personel" class="hidden">
+      <div class="card">
+        <div class="card-title">➕ Yeni Personel Ekle</div>
+        <div class="form-grid cols3">
+          <div class="form-group">
+            <label>Ad *</label>
+            <input type="text" id="personel-ad" placeholder="Ad" />
+          </div>
+          <div class="form-group">
+            <label>Soyad *</label>
+            <input type="text" id="personel-soyad" placeholder="Soyad" />
+          </div>
+          <div class="form-group">
+            <label>E-posta</label>
+            <input type="email" id="personel-email" placeholder="E-posta" />
+          </div>
+        </div>
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" onclick="addPersonel()">💾 Personeli Kaydet</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">👤 Personel Listesi</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>İşlem</th></tr></thead>
+            <tbody id="personel-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let API_URL = localStorage.getItem('erp_api_url') || '';
+let ACTIVE_PERSONEL = localStorage.getItem('erp_active_personel') || '';
+let cache = { birimler: [], personel: [], projeler: [], loglar: [] };
+let timerIntervals = {};
+
+// ============================================================
+// INIT
+// ============================================================
+window.onload = async () => {
+  if (!API_URL) { showPage('ayarlar'); showAlert('Lütfen önce API URL\'yi ayarlayın.', 'error'); return; }
+  await refreshAll();
+  updateActiveUserDisplay();
+};
+
+async function refreshAll() {
+  await Promise.all([loadBirimler(), loadPersonel(), loadProjeler()]);
+  populateDropdowns();
+  loadDashboard();
+}
+
+// ============================================================
+// API
+// ============================================================
+async function api(params) {
+  if (!API_URL) { showAlert('API URL ayarlanmamış!', 'error'); return null; }
+  try {
+    const url = API_URL + '?' + new URLSearchParams(params).toString();
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.error) { showAlert(data.error, 'error'); return null; }
+    return data;
+  } catch (e) {
+    showAlert('Bağlantı hatası: ' + e.message, 'error');
+    return null;
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const pages = ['dashboard','log','projeler','rapor','birimler','personel','ayarlar'];
+const titles = { dashboard:'Dashboard', log:'İş Logu', projeler:'Projeler', rapor:'Raporlama', birimler:'Birim Tanımları', personel:'Personel', ayarlar:'API Ayarları' };
+
+function showPage(name) {
+  pages.forEach(p => { document.getElementById('page-' + p).classList.add('hidden'); });
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + name).classList.remove('hidden');
+  document.getElementById('page-title').textContent = titles[name];
+  event && event.currentTarget && event.currentTarget.classList.add('active');
+  if (name === 'log') { loadLoglar(); populateLogDropdowns(); }
+  if (name === 'rapor') populateRaporDropdowns();
+  if (name === 'ayarlar') { document.getElementById('api-url-input').value = API_URL; loadPersonelToActiveSelect(); }
+  if (name === 'birimler') renderBirimler();
+  if (name === 'personel') renderPersonel();
+  if (name === 'projeler') { renderProjeler(); populateProjeDropdowns(); }
+  if (name === 'dashboard') loadDashboard();
+}
+
+// ============================================================
+// ALERT
+// ============================================================
+function showAlert(msg, type='success') {
+  const el = document.getElementById('alert-box');
+  el.className = 'alert alert-' + type;
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  setTimeout(() => el.classList.add('hidden'), 3000);
+}
+
+// ============================================================
+// AYARLAR
+// ============================================================
+function saveApiUrl() {
+  API_URL = document.getElementById('api-url-input').value.trim();
+  localStorage.setItem('erp_api_url', API_URL);
+  showAlert('API URL kaydedildi.');
+  refreshAll();
+}
+
+function saveActivePersonel() {
+  ACTIVE_PERSONEL = document.getElementById('active-personel-select').value;
+  localStorage.setItem('erp_active_personel', ACTIVE_PERSONEL);
+  updateActiveUserDisplay();
+  showAlert('Aktif kullanıcı kaydedildi.');
+}
+
+function updateActiveUserDisplay() {
+  const p = cache.personel.find(x => x.ID == ACTIVE_PERSONEL);
+  document.getElementById('current-user-display').textContent = p ? '👤 ' + p.Ad + ' ' + p.Soyad : '';
+}
+
+function loadPersonelToActiveSelect() {
+  const sel = document.getElementById('active-personel-select');
+  sel.innerHTML = '<option value="">-- Personel Seçin --</option>';
+  cache.personel.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.ID; opt.textContent = p.Ad + ' ' + p.Soyad;
+    if (p.ID == ACTIVE_PERSONEL) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+// ============================================================
+// BIRIMLER
+// ============================================================
+async function loadBirimler() {
+  const data = await api({ action: 'getBirimler' });
+  if (data) cache.birimler = data;
+}
+
+async function addBirim() {
+  const ad = document.getElementById('birim-ad').value.trim();
+  if (!ad) return showAlert('Birim adı zorunlu.', 'error');
+  const res = await api({ action: 'addBirim', ad, aciklama: document.getElementById('birim-aciklama').value });
+  if (res) {
+    showAlert('Birim eklendi.');
+    document.getElementById('birim-ad').value = '';
+    document.getElementById('birim-aciklama').value = '';
+    await loadBirimler();
+    renderBirimler();
+    populateDropdowns();
+  }
+}
+
+async function deleteBirim(id) {
+  if (!confirm('Bu birimi silmek istediğinize emin misiniz?')) return;
+  const res = await api({ action: 'deleteBirim', id });
+  if (res) { showAlert('Birim silindi.'); await loadBirimler(); renderBirimler(); populateDropdowns(); }
+}
+
+function renderBirimler() {
+  const tbody = document.getElementById('birim-table-body');
+  tbody.innerHTML = cache.birimler.length === 0
+    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz birim eklenmemiş.</td></tr>'
+    : cache.birimler.map(b => `<tr>
+        <td><code style="font-size:11px">${b.ID}</code></td>
+        <td><strong>${b.Ad}</strong></td>
+        <td>${b.Aciklama || '-'}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="deleteBirim('${b.ID}')">🗑 Sil</button></td>
+      </tr>`).join('');
+}
+
+// ============================================================
+// PERSONEL
+// ============================================================
+async function loadPersonel() {
+  const data = await api({ action: 'getPersonel' });
+  if (data) cache.personel = data;
+}
+
+async function addPersonel() {
+  const ad = document.getElementById('personel-ad').value.trim();
+  const soyad = document.getElementById('personel-soyad').value.trim();
+  if (!ad || !soyad) return showAlert('Ad ve soyad zorunlu.', 'error');
+  const res = await api({ action: 'addPersonel', ad, soyad, email: document.getElementById('personel-email').value });
+  if (res) {
+    showAlert('Personel eklendi.');
+    ['personel-ad','personel-soyad','personel-email'].forEach(id => document.getElementById(id).value = '');
+    await loadPersonel();
+    renderPersonel();
+    populateDropdowns();
+  }
+}
+
+async function deletePersonel(id) {
+  if (!confirm('Bu personeli silmek istediğinize emin misiniz?')) return;
+  const res = await api({ action: 'deletePersonel', id });
+  if (res) { showAlert('Personel silindi.'); await loadPersonel(); renderPersonel(); populateDropdowns(); }
+}
+
+function renderPersonel() {
+  const tbody = document.getElementById('personel-table-body');
+  tbody.innerHTML = cache.personel.length === 0
+    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz personel eklenmemiş.</td></tr>'
+    : cache.personel.map(p => `<tr>
+        <td><code style="font-size:11px">${p.ID}</code></td>
+        <td><strong>${p.Ad} ${p.Soyad}</strong></td>
+        <td>${p.Email || '-'}</td>
+        <td><button class="btn btn-danger btn-sm" onclick="deletePersonel('${p.ID}')">🗑 Sil</button></td>
+      </tr>`).join('');
+}
+
+// ============================================================
+// PROJELER
+// ============================================================
+async function loadProjeler() {
+  const data = await api({ action: 'getProjeler' });
+  if (data) cache.projeler = data;
+}
+
+async function addProje() {
+  const ad = document.getElementById('proje-ad').value.trim();
+  const tip = document.getElementById('proje-tip').value;
+  if (!ad) return showAlert('Proje adı zorunlu.', 'error');
+  const res = await api({ action: 'addProje', ad, tip, birimId: document.getElementById('proje-birim').value, durum: document.getElementById('proje-durum').value, aciklama: document.getElementById('proje-aciklama').value });
+  if (res) {
+    showAlert('Proje eklendi.');
+    ['proje-ad','proje-aciklama'].forEach(id => document.getElementById(id).value = '');
+    await loadProjeler();
+    renderProjeler();
+    populateDropdowns();
+  }
+}
+
+async function updateProjeDurum(id, durum) {
+  const res = await api({ action: 'updateProje', id, durum });
+  if (res) { showAlert('Proje güncellendi.'); await loadProjeler(); renderProjeler(); }
+}
+
+function renderProjeler() {
+  const tbody = document.getElementById('proje-table-body');
+  const birimMap = {};
+  cache.birimler.forEach(b => birimMap[b.ID] = b.Ad);
+  tbody.innerHTML = cache.projeler.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz proje eklenmemiş.</td></tr>'
+    : cache.projeler.map(p => {
+        const tipBadge = p.Tip === 'Geliştirme' ? 'badge-blue' : 'badge-gray';
+        const durumBadge = { 'Aktif':'badge-green', 'Beklemede':'badge-yellow', 'Tamamlandı':'badge-gray' }[p.Durum] || 'badge-gray';
+        return `<tr>
+          <td><strong>${p.Ad}</strong></td>
+          <td><span class="badge ${tipBadge}">${p.Tip}</span></td>
+          <td>${birimMap[p.BirimID] || '-'}</td>
+          <td>
+            <select class="badge ${durumBadge}" onchange="updateProjeDurum('${p.ID}', this.value)" style="border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:500">
+              ${['Aktif','Beklemede','Tamamlandı'].map(d => `<option ${p.Durum==d?'selected':''}>${d}</option>`).join('')}
+            </select>
+          </td>
+          <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.Aciklama || '-'}</td>
+          <td><span style="font-size:11px;color:var(--text-secondary)">${p.OlusturmaTarihi ? new Date(p.OlusturmaTarihi).toLocaleDateString('tr-TR') : '-'}</span></td>
+        </tr>`;
+      }).join('');
+}
+
+// ============================================================
+// DROPDOWN POPULATE
+// ============================================================
+function populateDropdowns() {
+  populateLogDropdowns();
+  populateProjeDropdowns();
+  populateRaporDropdowns();
+  updateActiveUserDisplay();
+}
+
+function populateBirimSelect(selId, includeEmpty=true) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const val = sel.value;
+  sel.innerHTML = (includeEmpty ? '<option value="">-- Seçin --</option>' : '');
+  cache.birimler.forEach(b => {
+    const opt = document.createElement('option');
+    opt.value = b.ID; opt.textContent = b.Ad;
+    if (b.ID == val) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function populatePersonelSelect(selId, includeEmpty=true) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const val = sel.value || ACTIVE_PERSONEL;
+  sel.innerHTML = (includeEmpty ? '<option value="">-- Seçin --</option>' : '');
+  cache.personel.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.ID; opt.textContent = p.Ad + ' ' + p.Soyad;
+    if (p.ID == val) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function populateProjeSelect(selId, includeGunluk=true) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const val = sel.value;
+  sel.innerHTML = (includeGunluk ? '<option value="">-- Günlük İş --</option>' : '<option value="">Tümü</option>');
+  cache.projeler.filter(p => p.Durum !== 'Tamamlandı' || !includeGunluk).forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.ID; opt.textContent = '[' + p.Tip[0] + '] ' + p.Ad;
+    if (p.ID == val) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function populateLogDropdowns() {
+  populatePersonelSelect('log-personel');
+  populateProjeSelect('log-proje');
+  populateBirimSelect('log-birim');
+  populatePersonelSelect('filter-personel', true);
+  populateProjeSelect('filter-proje', false);
+}
+
+function populateProjeDropdowns() {
+  populateBirimSelect('proje-birim');
+}
+
+function populateRaporDropdowns() {
+  populateBirimSelect('rapor-birim', false);
+  const rb = document.getElementById('rapor-birim');
+  if (rb && !rb.querySelector('option[value=""]')) rb.insertAdjacentHTML('afterbegin', '<option value="">Tümü</option>');
+  populatePersonelSelect('rapor-personel', false);
+  const rp = document.getElementById('rapor-personel');
+  if (rp && !rp.querySelector('option[value=""]')) rp.insertAdjacentHTML('afterbegin', '<option value="">Tümü</option>');
+  populateProjeSelect('rapor-proje', false);
+}
+
+// ============================================================
+// LOGLAR
+// ============================================================
+async function addLog() {
+  const personelId = document.getElementById('log-personel').value;
+  const baslik = document.getElementById('log-baslik').value.trim();
+  const baslangic = document.getElementById('log-baslangic').value;
+  const birimId = document.getElementById('log-birim').value;
+  const projeId = document.getElementById('log-proje').value;
+
+  if (!personelId) return showAlert('Personel seçimi zorunlu.', 'error');
+  if (!baslik) return showAlert('Başlık zorunlu.', 'error');
+  if (!baslangic) return showAlert('Başlangıç zamanı zorunlu.', 'error');
+  if (!projeId && !birimId) return showAlert('Proje veya birim seçiniz.', 'error');
+
+  const params = { action: 'addLog', personelId, baslik, projeId, birimId, aciklama: document.getElementById('log-aciklama').value, baslangic: new Date(baslangic).toISOString(), bitis: document.getElementById('log-bitis').value ? new Date(document.getElementById('log-bitis').value).toISOString() : '' };
+  const res = await api(params);
+  if (res) {
+    showAlert('Log eklendi. Süre: ' + formatSure(res.sureDakika));
+    ['log-baslik','log-aciklama','log-bitis'].forEach(id => document.getElementById(id).value = '');
+    await loadLoglar();
+    loadDashboard();
+  }
+}
+
+async function bitisEkle(id) {
+  const bitis = new Date().toISOString();
+  const res = await api({ action: 'updateLog', id, bitis });
+  if (res) { showAlert('Çalışma tamamlandı.'); await loadLoglar(); loadDashboard(); }
+}
+
+async function deleteLog(id) {
+  if (!confirm('Bu logu silmek istediğinize emin misiniz?')) return;
+  const res = await api({ action: 'deleteLog', id });
+  if (res) { showAlert('Log silindi.'); await loadLoglar(); loadDashboard(); }
+}
+
+async function loadLoglar() {
+  const data = await api({ action: 'getLoglar' });
+  if (!data) return;
+  cache.loglar = data;
+  renderLoglar();
+}
+
+function renderLoglar() {
+  const birimMap = {}, personelMap = {}, projeMap = {};
+  cache.birimler.forEach(b => birimMap[b.ID] = b.Ad);
+  cache.personel.forEach(p => personelMap[p.ID] = p.Ad + ' ' + p.Soyad);
+  cache.projeler.forEach(p => projeMap[p.ID] = p.Ad);
+
+  const filterP = document.getElementById('filter-personel')?.value || '';
+  const filterPr = document.getElementById('filter-proje')?.value || '';
+
+  let logs = [...cache.loglar];
+  if (filterP) logs = logs.filter(l => l.PersonelID == filterP);
+  if (filterPr) logs = logs.filter(l => l.ProjeID == filterPr);
+  logs.sort((a,b) => new Date(b.Baslangic) - new Date(a.Baslangic));
+
+  const tbody = document.getElementById('log-table-body');
+  tbody.innerHTML = logs.length === 0
+    ? '<tr><td colspan="8" style="text-align:center;color:var(--text-secondary);padding:24px">Kayıt bulunamadı.</td></tr>'
+    : logs.map(l => {
+        const aktif = !l.Bitis;
+        const sure = aktif ? '<span class="badge badge-green">Devam ediyor</span>' : formatSure(l.SureDakika);
+        return `<tr>
+          <td style="white-space:nowrap">${l.Baslangic ? new Date(l.Baslangic).toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '-'}</td>
+          <td>${personelMap[l.PersonelID] || l.PersonelID || '-'}</td>
+          <td>${l.ProjeID ? (projeMap[l.ProjeID] || l.ProjeID) : '<span style="color:var(--text-secondary)">Günlük İş</span>'}</td>
+          <td>${birimMap[l.BirimID] || l.BirimID || '-'}</td>
+          <td><strong>${l.Baslik}</strong>${l.Aciklama ? '<br><span style="font-size:11px;color:var(--text-secondary)">' + l.Aciklama + '</span>' : ''}</td>
+          <td style="white-space:nowrap">${sure}</td>
+          <td>${aktif ? '<span class="badge badge-green">🟢 Aktif</span>' : '<span class="badge badge-gray">✅ Tamamlandı</span>'}</td>
+          <td style="white-space:nowrap">
+            ${aktif ? `<button class="btn btn-success btn-sm" onclick="bitisEkle('${l.ID}')">⏹ Bitir</button> ` : ''}
+            <button class="btn btn-danger btn-sm" onclick="deleteLog('${l.ID}')">🗑</button>
+          </td>
+        </tr>`;
+      }).join('');
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function loadDashboard() {
+  if (!API_URL) return;
+  const data = await api({ action: 'getLoglar' });
+  if (!data) return;
+  cache.loglar = data;
+
+  const birimMap = {}, personelMap = {}, projeMap = {};
+  cache.birimler.forEach(b => birimMap[b.ID] = b.Ad);
+  cache.personel.forEach(p => personelMap[p.ID] = p.Ad + ' ' + p.Soyad);
+  cache.projeler.forEach(p => projeMap[p.ID] = p.Ad);
+
+  const aktifler = data.filter(l => !l.Bitis);
+  const buHafta = new Date(); buHafta.setDate(buHafta.getDate() - 7);
+  const haftalik = data.filter(l => l.Bitis && new Date(l.Baslangic) >= buHafta);
+  const toplamSure = haftalik.reduce((s,l) => s + (parseInt(l.SureDakika)||0), 0);
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${aktifler.length}</div><div class="stat-lbl">Aktif Çalışma</div></div>
+    <div class="stat"><div class="stat-val">${haftalik.length}</div><div class="stat-lbl">Bu Hafta Kayıt</div></div>
+    <div class="stat"><div class="stat-val">${formatSure(toplamSure)}</div><div class="stat-lbl">Bu Hafta Toplam Süre</div></div>
+    <div class="stat"><div class="stat-val">${cache.projeler.filter(p=>p.Durum==='Aktif').length}</div><div class="stat-lbl">Aktif Proje</div></div>
+  `;
+
+  const aktifDiv = document.getElementById('aktif-loglar');
+  aktifDiv.innerHTML = aktifler.length === 0
+    ? '<p style="color:var(--text-secondary);font-size:13px">Şu an aktif çalışma yok.</p>'
+    : aktifler.map(l => `<div class="active-log">
+        <div class="active-log-info">
+          <h4>${personelMap[l.PersonelID] || '-'} — ${l.Baslik}</h4>
+          <p>${l.ProjeID ? (projeMap[l.ProjeID]||'-') : 'Günlük İş'} · ${birimMap[l.BirimID] || '-'} · Başlangıç: ${new Date(l.Baslangic).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</p>
+        </div>
+        <button class="btn btn-success btn-sm" onclick="bitisEkle('${l.ID}')">⏹ Bitir</button>
+      </div>`).join('');
+
+  const sonlar = [...data].filter(l=>l.Bitis).sort((a,b)=>new Date(b.Baslangic)-new Date(a.Baslangic)).slice(0,10);
+  document.getElementById('son-loglar-body').innerHTML = sonlar.map(l => `<tr>
+    <td>${new Date(l.Baslangic).toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
+    <td>${personelMap[l.PersonelID]||'-'}</td>
+    <td>${l.ProjeID?(projeMap[l.ProjeID]||'-'):'Günlük İş'} · ${birimMap[l.BirimID]||'-'}</td>
+    <td>${l.Baslik}</td>
+    <td>${formatSure(l.SureDakika)}</td>
+  </tr>`).join('');
+}
+
+// ============================================================
+// RAPOR
+// ============================================================
+async function loadRapor() {
+  const params = {
+    action: 'getRapor',
+    baslangicTarih: document.getElementById('rapor-baslangic').value,
+    bitisTarih: document.getElementById('rapor-bitis').value,
+    birimId: document.getElementById('rapor-birim').value,
+    personelId: document.getElementById('rapor-personel').value,
+    projeId: document.getElementById('rapor-proje').value
+  };
+  const data = await api(params);
+  if (!data) return;
+
+  document.getElementById('rapor-result').classList.remove('hidden');
+  document.getElementById('rapor-stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${data.toplamKayit}</div><div class="stat-lbl">Toplam Kayıt</div></div>
+    <div class="stat"><div class="stat-val">${formatSure(data.toplamDakika)}</div><div class="stat-lbl">Toplam Süre</div></div>
+    <div class="stat"><div class="stat-val">${Object.keys(data.birimOzet).length}</div><div class="stat-lbl">Birim Sayısı</div></div>
+    <div class="stat"><div class="stat-val">${Object.keys(data.personelOzet).length}</div><div class="stat-lbl">Personel Sayısı</div></div>
+  `;
+
+  renderBarChart('rapor-birim-chart', data.birimOzet, data.toplamDakika);
+  renderBarChart('rapor-personel-chart', data.personelOzet, data.toplamDakika);
+  renderBarChart('rapor-proje-chart', data.projeOzet, data.toplamDakika, true);
+
+  const detay = data.detay.sort((a,b) => new Date(b.Baslangic)-new Date(a.Baslangic));
+  document.getElementById('rapor-detay-body').innerHTML = detay.map(l => `<tr>
+    <td>${l.Baslangic ? new Date(l.Baslangic).toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '-'}</td>
+    <td>${l.PersonelAd}</td>
+    <td>${l.ProjeAd}</td>
+    <td>${l.BirimAd}</td>
+    <td>${l.Baslik}</td>
+    <td>${formatSure(l.SureDakika)}</td>
+  </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-secondary)">Kayıt bulunamadı.</td></tr>';
+}
+
+function renderBarChart(containerId, data, toplam, wide=false) {
+  const container = document.getElementById(containerId);
+  const sorted = Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  container.innerHTML = sorted.length === 0
+    ? '<p style="color:var(--text-secondary);font-size:13px">Veri yok.</p>'
+    : sorted.map(([label, sure]) => `
+        <div class="rapor-bar">
+          <div class="rapor-bar-label" style="${wide?'min-width:200px':'min-width:140px'}">${label}</div>
+          <div class="rapor-bar-track"><div class="rapor-bar-fill" style="width:${toplam?Math.round(sure/toplam*100):0}%"></div></div>
+          <div class="rapor-bar-val">${formatSure(sure)}</div>
+        </div>`).join('');
+}
+
+// ============================================================
+// YARDIMCI
+// ============================================================
+function formatSure(dakika) {
+  if (!dakika || dakika <= 0) return '0 dk';
+  const s = parseInt(dakika);
+  const h = Math.floor(s / 60);
+  const m = s % 60;
+  return h > 0 ? `${h}s ${m}dk` : `${m} dk`;
+}
+
+function setNow(id) {
+  const now = new Date();
+  now.setSeconds(0, 0);
+  document.getElementById(id).value = now.toISOString().slice(0,16);
+}
+</script>
+</body>
+</html>
