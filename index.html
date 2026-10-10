@@ -117,6 +117,8 @@ tr:hover td{background:#f9fafb}
   <div class="topbar">
     <h1 id="page-title">Dashboard</h1>
     <div class="user-info">
+      <span id="refresh-indicator" style="font-size:11px;color:var(--text-sec)"></span>
+      <button id="refresh-btn" class="btn btn-outline btn-sm" onclick="manualRefresh()" title="Verileri yenile" style="padding:4px 8px;font-size:13px">🔄</button>
       <span id="user-badge"></span>
       <span id="user-name"></span>
     </div>
@@ -297,15 +299,63 @@ tr:hover td{background:#f9fafb}
 // ============================================================
 // STATE
 // ============================================================
+const APP_VERSION = '2.1';
 let API_URL = localStorage.getItem('erp_api_url') || '';
 let ME = null;
 let cache = { birimler:[], kullanicilar:[], projeler:[], loglar:[], atamalar:[] };
 let dragSrc = null;
+let autoRefreshTimer = null;
+const AUTO_REFRESH_MS = 5 * 60 * 1000; // 5 dakika
+
+// Versiyon değişmişse cache temizle
+function checkVersion() {
+  const storedVersion = localStorage.getItem('erp_version');
+  if (storedVersion !== APP_VERSION) {
+    clearAllCache();
+    localStorage.setItem('erp_version', APP_VERSION);
+    console.log('Yeni versiyon tespit edildi, cache temizlendi:', APP_VERSION);
+  }
+}
+
+function clearAllCache() {
+  cache = { birimler:[], kullanicilar:[], projeler:[], loglar:[], atamalar:[] };
+  // localStorage'dan sadece cache ile ilgili olanları temizle (API URL ve versiyon korunsun)
+  const keysToKeep = ['erp_api_url', 'erp_version'];
+  Object.keys(localStorage).forEach(key => {
+    if (!keysToKeep.includes(key)) localStorage.removeItem(key);
+  });
+}
+
+function startAutoRefresh() {
+  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+  autoRefreshTimer = setInterval(async () => {
+    clearAllCache();
+    await refreshAll();
+    showRefreshIndicator();
+  }, AUTO_REFRESH_MS);
+}
+
+function showRefreshIndicator() {
+  const el = document.getElementById('refresh-indicator');
+  if (!el) return;
+  el.textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
+}
+
+async function manualRefresh() {
+  const btn = document.getElementById('refresh-btn');
+  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+  clearAllCache();
+  await refreshAll();
+  showRefreshIndicator();
+  if (btn) { btn.textContent = '🔄'; btn.disabled = false; }
+  showAlert('Veriler güncellendi.');
+}
 
 // ============================================================
 // INIT
 // ============================================================
 window.onload = async () => {
+  checkVersion(); // Versiyon kontrolü - önce çalışır
   if (!API_URL) { showLoginWithError('API URL ayarlanmamış. Lütfen sistem yöneticisiyle iletişime geçin.'); return; }
   await doLogin();
 };
@@ -319,6 +369,7 @@ async function doLogin() {
   document.getElementById('user-badge').innerHTML = ME.isAdmin ? '<span class="badge b-purple">Yönetici</span>' : '<span class="badge b-blue">Normal</span>';
   if (ME.isAdmin) document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
   await refreshAll();
+  startAutoRefresh(); // 5 dakikada bir otomatik yenile
 }
 
 function showLoginWithError(msg) {
