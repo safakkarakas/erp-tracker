@@ -116,7 +116,7 @@ tr:hover td { background: #f9fafb; }
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h2>ERP Birimi<br>İş Takip</h2>
-    <p>v1.2</p>
+    <p>v1.3</p>
   </div>
   <div class="nav-section">Ana Menü</div>
   <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
@@ -395,6 +395,13 @@ tr:hover td { background: #f9fafb; }
             <label>E-posta</label>
             <input type="email" id="personel-email" placeholder="E-posta" />
           </div>
+          <div class="form-group">
+            <label>Yetki *</label>
+            <select id="personel-rol">
+              <option value="Normal">Normal</option>
+              <option value="Yonetici">Yönetici</option>
+            </select>
+          </div>
         </div>
         <div style="margin-top:12px">
           <button class="btn btn-primary" onclick="addPersonel()">💾 Kullanıcıyı Kaydet</button>
@@ -404,7 +411,7 @@ tr:hover td { background: #f9fafb; }
         <div class="card-title">👤 Kullanıcı Listesi</div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>İşlem</th></tr></thead>
+            <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>Yetki</th><th>İşlem</th></tr></thead>
             <tbody id="personel-table-body"></tbody>
           </table>
         </div>
@@ -581,10 +588,12 @@ async function addPersonel() {
   const ad = document.getElementById('personel-ad').value.trim();
   const soyad = document.getElementById('personel-soyad').value.trim();
   if (!ad || !soyad) return showAlert('Ad ve soyad zorunlu.', 'error');
-  const res = await api({ action: 'addPersonel', ad, soyad, email: document.getElementById('personel-email').value });
+  const rol = document.getElementById('personel-rol').value;
+  const res = await api({ action: 'addPersonel', ad, soyad, email: document.getElementById('personel-email').value, rol });
   if (res) {
     showAlert('Kullanıcı eklendi.');
     ['personel-ad','personel-soyad','personel-email'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('personel-rol').value = 'Normal';
     await loadPersonel();
     renderPersonel();
     populateDropdowns();
@@ -600,11 +609,12 @@ async function deletePersonel(id) {
 function renderPersonel() {
   const tbody = document.getElementById('personel-table-body');
   tbody.innerHTML = cache.personel.length === 0
-    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
+    ? '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
     : cache.personel.map(p => `<tr>
         <td><code style="font-size:11px">${p.ID}</code></td>
         <td><strong>${p.Ad} ${p.Soyad}</strong></td>
         <td>${p.Email || '-'}</td>
+        <td><span class="badge ${p.Rol === 'Yonetici' ? 'badge-blue' : 'badge-gray'}">${p.Rol === 'Yonetici' ? 'Yönetici' : 'Normal'}</span></td>
         <td><button class="btn btn-danger btn-sm" onclick="deletePersonel('${p.ID}')">🗑 Sil</button></td>
       </tr>`).join('');
 }
