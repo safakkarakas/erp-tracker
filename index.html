@@ -86,9 +86,17 @@ tr:hover td{background:#f9fafb}
   <div class="login-card">
     <div style="font-size:48px;margin-bottom:16px">📊</div>
     <h2>ERP Birimi İş Takip</h2>
-    <p>Sisteme erişmek için Google hesabınızla giriş yapın.</p>
+    <p id="login-desc">Google hesabınızla giriş yapın.</p>
     <div id="login-error" class="alert alert-error hidden"></div>
-    <button class="btn btn-google" onclick="googleLogin()">
+
+    <!-- API URL alanı - sadece URL yoksa görünür -->
+    <div id="api-url-section" class="hidden" style="margin-bottom:16px;text-align:left">
+      <label style="font-size:12px;font-weight:500;color:var(--text-sec);display:block;margin-bottom:4px">Apps Script URL</label>
+      <input type="text" id="login-api-url" placeholder="https://script.google.com/macros/s/..." style="width:100%;margin-bottom:8px;font-size:12px"/>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveApiUrlFromLogin()">URL'yi Kaydet ve Giriş Yap</button>
+    </div>
+
+    <button id="login-btn" class="btn btn-google" onclick="doLogin()">
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
       Google ile Giriş Yap
     </button>
@@ -355,33 +363,62 @@ async function manualRefresh() {
 // INIT
 // ============================================================
 window.onload = async () => {
-  checkVersion(); // Versiyon kontrolü - önce çalışır
-  if (!API_URL) { showLoginWithError('API URL ayarlanmamış. Lütfen sistem yöneticisiyle iletişime geçin.'); return; }
+  checkVersion();
+  if (!API_URL) {
+    // API URL yok — giriş ekranında URL alanını göster
+    document.getElementById('api-url-section').classList.remove('hidden');
+    document.getElementById('login-btn').classList.add('hidden');
+    document.getElementById('login-desc').textContent = 'Önce Apps Script URL\'sini girin.';
+    document.getElementById('login-screen').classList.remove('hidden');
+    return;
+  }
   await doLogin();
 };
 
+function saveApiUrlFromLogin() {
+  const url = document.getElementById('login-api-url').value.trim();
+  if (!url) { showLoginError('URL boş olamaz.'); return; }
+  API_URL = url;
+  localStorage.setItem('erp_api_url', url);
+  document.getElementById('api-url-section').classList.add('hidden');
+  document.getElementById('login-btn').classList.remove('hidden');
+  document.getElementById('login-desc').textContent = 'Google hesabınızla giriş yapın.';
+  doLogin();
+}
+
 async function doLogin() {
+  const btn = document.getElementById('login-btn');
+  if (btn) { btn.textContent = '⏳ Giriş yapılıyor...'; btn.disabled = true; }
+
   const res = await api({ action: 'getMe' });
-  if (!res || res.error) { showLoginWithError(res?.error || 'Giriş yapılamadı.'); return; }
+
+  if (btn) { btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google ile Giriş Yap`; btn.disabled = false; }
+
+  if (!res || res.error) {
+    // Apps Script oturumu yoksa Google'a yönlendir
+    if (!res || res.error?.includes('Kimlik') || res.error?.includes('kayıtlı değil')) {
+      showLoginError(res?.error || 'Giriş başarısız. Sayfayı yenileyip tekrar deneyin.');
+    } else {
+      showLoginError(res?.error || 'Bağlantı hatası.');
+    }
+    return;
+  }
+
   ME = res;
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('user-name').textContent = ME.Ad + ' ' + ME.Soyad;
-  document.getElementById('user-badge').innerHTML = ME.isAdmin ? '<span class="badge b-purple">Yönetici</span>' : '<span class="badge b-blue">Normal</span>';
+  document.getElementById('user-badge').innerHTML = ME.isAdmin
+    ? '<span class="badge b-purple">Yönetici</span>'
+    : '<span class="badge b-blue">Normal</span>';
   if (ME.isAdmin) document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
   await refreshAll();
-  startAutoRefresh(); // 5 dakikada bir otomatik yenile
+  startAutoRefresh();
 }
 
-function showLoginWithError(msg) {
+function showLoginError(msg) {
   document.getElementById('login-screen').classList.remove('hidden');
   const el = document.getElementById('login-error');
   el.textContent = msg; el.classList.remove('hidden');
-}
-
-function googleLogin() {
-  // Google OAuth - Apps Script otomatik yönetir
-  // Sayfayı yenilediğinde Google oturumu aktifse otomatik giriş yapar
-  window.location.reload();
 }
 
 async function refreshAll() {
@@ -431,9 +468,11 @@ function showAlert(msg, type='success') {
 }
 
 function saveApiUrl() {
-  API_URL = document.getElementById('api-url-input').value.trim();
+  const url = document.getElementById('api-url-input').value.trim();
+  if (!url) return showAlert('URL boş olamaz.', 'error');
+  API_URL = url;
   localStorage.setItem('erp_api_url', API_URL);
-  showAlert('Kaydedildi.'); doLogin();
+  showAlert('API URL kaydedildi.');
 }
 
 // ============================================================
