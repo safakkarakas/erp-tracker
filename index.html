@@ -116,7 +116,7 @@ tr:hover td { background: #f9fafb; }
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h2>ERP Birimi<br>İş Takip</h2>
-    <p>v1.0</p>
+    <p>v1.1</p>
   </div>
   <div class="nav-section">Ana Menü</div>
   <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
@@ -418,6 +418,15 @@ tr:hover td { background: #f9fafb; }
 // ============================================================
 // STATE
 // ============================================================
+// Sayfa her açılışında API URL ve aktif personel dışındaki her şeyi temizle
+(function clearCacheOnLoad() {
+  const apiUrl = localStorage.getItem('erp_api_url');
+  const activePersonel = localStorage.getItem('erp_active_personel');
+  localStorage.clear();
+  if (apiUrl) localStorage.setItem('erp_api_url', apiUrl);
+  if (activePersonel) localStorage.setItem('erp_active_personel', activePersonel);
+})();
+
 let API_URL = localStorage.getItem('erp_api_url') || '';
 let ACTIVE_PERSONEL = localStorage.getItem('erp_active_personel') || '';
 let cache = { birimler: [], personel: [], projeler: [], loglar: [] };
