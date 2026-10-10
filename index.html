@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ERP Birimi İş Takip</title>
 <style>
-:root{--primary:#1a56db;--primary-dark:#1342a8;--success:#057a55;--danger:#c81e1e;--warning:#c27803;--bg:#f3f4f6;--surface:#fff;--border:#e5e7eb;--text:#111827;--text-sec:#6b7280;--sw:220px}
+:root{--primary:#1a56db;--primary-dark:#1342a8;--success:#057a55;--danger:#c81e1e;--bg:#f3f4f6;--surface:#fff;--border:#e5e7eb;--text:#111827;--text-sec:#6b7280;--sw:220px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh}
 .sidebar{width:var(--sw);background:#1e293b;color:#e2e8f0;display:flex;flex-direction:column;flex-shrink:0;position:fixed;height:100vh;overflow-y:auto}
@@ -31,8 +31,7 @@ body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--text);di
 .fg{display:flex;flex-direction:column;gap:4px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.s2{grid-column:span 2}
-.s3{grid-column:span 3}
+.s2{grid-column:span 2}.s3{grid-column:span 3}
 label{font-size:12px;font-weight:500;color:var(--text-sec)}
 input,select,textarea{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;background:#fff}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(26,86,219,.1)}
@@ -44,15 +43,14 @@ textarea{resize:vertical;min-height:60px}
 .btn-danger{background:var(--danger);color:#fff}
 .btn-sm{padding:5px 10px;font-size:12px}
 .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-outline:hover{background:var(--bg)}
-.btn-warn{background:#d97706;color:#fff}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{background:var(--bg);padding:10px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--text-sec);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)}
 td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:hover td{background:#f9fafb}
 .badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
 .b-blue{background:#dbeafe;color:#1d4ed8}.b-green{background:#d1fae5;color:#065f46}
-.b-yellow{background:#fef3c7;color:#92400e}.b-red{background:#fee2e2;color:#991b1b}
-.b-gray{background:#f3f4f6;color:#374151}.b-purple{background:#ede9fe;color:#5b21b6}
+.b-yellow{background:#fef3c7;color:#92400e}.b-gray{background:#f3f4f6;color:#374151}
+.b-purple{background:#ede9fe;color:#5b21b6}
 .active-log{background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .active-log-info h4{font-size:14px;font-weight:600;color:#065f46}
 .active-log-info p{font-size:12px;color:#047857;margin-top:2px}
@@ -65,49 +63,52 @@ tr:hover td{background:#f9fafb}
 .alert{padding:10px 14px;border-radius:6px;font-size:13px;margin-bottom:12px}
 .alert-success{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7}
 .alert-error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-.divider{height:1px;background:var(--border);margin:16px 0}
 .tw{overflow-x:auto}
 .proje-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;cursor:grab}
 .proje-item:hover{border-color:var(--primary)}
 .proje-item.dragging{opacity:.5;border:2px dashed var(--primary)}
-.atama-tag{display:inline-flex;align-items:center;gap:4px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:3px 8px;font-size:12px;margin:2px}
+
+/* GİRİŞ */
 .login-screen{position:fixed;inset:0;background:#1e293b;display:flex;align-items:center;justify-content:center;z-index:1000}
-.login-card{background:#fff;border-radius:16px;padding:40px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.login-card h2{font-size:20px;font-weight:700;margin-bottom:8px}
-.login-card p{font-size:13px;color:var(--text-sec);margin-bottom:24px}
-.btn-google{background:#fff;border:1px solid var(--border);color:var(--text);width:100%;justify-content:center;padding:12px;font-size:14px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
-.btn-google:hover{background:#f9fafb}
+.login-card{background:#fff;border-radius:16px;padding:40px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-card h2{font-size:20px;font-weight:700;margin-bottom:8px;text-align:center}
+.login-card .sub{font-size:13px;color:var(--text-sec);margin-bottom:24px;text-align:center}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- GİRİŞ EKRANI -->
 <div id="login-screen" class="login-screen">
   <div class="login-card">
-    <div style="font-size:48px;margin-bottom:16px">📊</div>
+    <div style="font-size:48px;text-align:center;margin-bottom:16px">📊</div>
     <h2>ERP Birimi İş Takip</h2>
-    <p id="login-desc">Google hesabınızla giriş yapın.</p>
+    <div class="sub">Sisteme giriş yapın</div>
     <div id="login-error" class="alert alert-error hidden"></div>
 
-    <!-- API URL alanı - sadece URL yoksa görünür -->
-    <div id="api-url-section" class="hidden" style="margin-bottom:16px;text-align:left">
-      <label style="font-size:12px;font-weight:500;color:var(--text-sec);display:block;margin-bottom:4px">Apps Script URL</label>
-      <input type="text" id="login-api-url" placeholder="https://script.google.com/macros/s/..." style="width:100%;margin-bottom:8px;font-size:12px"/>
-      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveApiUrlFromLogin()">URL'yi Kaydet ve Giriş Yap</button>
+    <div id="step-url" class="hidden">
+      <div class="fg" style="margin-bottom:12px">
+        <label>Apps Script URL (Sadece ilk kurulumda)</label>
+        <input type="text" id="login-api-url" placeholder="https://script.google.com/macros/s/.../exec"/>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="saveUrlAndNext()">Devam</button>
     </div>
 
-    <button id="login-btn" class="btn btn-google" onclick="doLogin()">
-      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
-      Google ile Giriş Yap
-    </button>
-    <p style="font-size:11px;color:var(--text-sec);margin-top:16px">Erişim sorunu yaşıyorsanız yöneticiyle iletişime geçin.</p>
+    <div id="step-login" class="hidden">
+      <div class="fg" style="margin-bottom:12px">
+        <label>E-posta adresiniz</label>
+        <input type="email" id="login-email" placeholder="ornek@gmail.com" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doLogin()">🚀 Giriş Yap</button>
+      <button class="btn btn-outline" style="width:100%;justify-content:center;font-size:12px" onclick="showUrlStep()">⚙️ API URL'yi değiştir</button>
+    </div>
   </div>
 </div>
 
+<!-- ANA UYGULAMA -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h2>ERP Birimi<br>İş Takip</h2>
-    <p>v2.0</p>
+    <p>v3.0</p>
   </div>
   <div class="nav-sec">Ana Menü</div>
   <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="ic">📊</span> Dashboard</div>
@@ -126,7 +127,7 @@ tr:hover td{background:#f9fafb}
     <h1 id="page-title">Dashboard</h1>
     <div class="user-info">
       <span id="refresh-indicator" style="font-size:11px;color:var(--text-sec)"></span>
-      <button id="refresh-btn" class="btn btn-outline btn-sm" onclick="manualRefresh()" title="Verileri yenile" style="padding:4px 8px;font-size:13px">🔄</button>
+      <button class="btn btn-outline btn-sm" onclick="manualRefresh()" title="Yenile" style="padding:4px 8px">🔄</button>
       <span id="user-badge"></span>
       <span id="user-name"></span>
     </div>
@@ -143,7 +144,7 @@ tr:hover td{background:#f9fafb}
       </div>
       <div class="card">
         <div class="card-title">
-          <span>📋 Bana Atanan İşler (Öncelik Sırası)</span>
+          <span>📋 Bana Atanan İşler</span>
           <button class="btn btn-sm btn-outline" onclick="saveOncelik()">💾 Sırayı Kaydet</button>
         </div>
         <div id="atanan-isler"></div>
@@ -159,38 +160,14 @@ tr:hover td{background:#f9fafb}
       <div class="card">
         <div class="card-title">➕ Yeni İş Logu</div>
         <div class="g3">
-          <div class="fg">
-            <label>Kullanıcı *</label>
-            <select id="log-kullanici" onchange="onLogKullaniciChange()"></select>
-          </div>
-          <div class="fg">
-            <label>Proje</label>
-            <select id="log-proje" onchange="onLogProjeChange()"><option value="">-- Günlük İş --</option></select>
-          </div>
-          <div class="fg">
-            <label>Alt Proje</label>
-            <select id="log-altproje"><option value="">-- Yok --</option></select>
-          </div>
-          <div class="fg s3">
-            <label>Başlık *</label>
-            <input type="text" id="log-baslik" placeholder="Yapılan işin kısa açıklaması"/>
-          </div>
-          <div class="fg s3">
-            <label>Açıklama</label>
-            <textarea id="log-aciklama" placeholder="Detaylı açıklama (isteğe bağlı)"></textarea>
-          </div>
-          <div class="fg">
-            <label>Ait Olduğu Birim *</label>
-            <select id="log-birim"><option value="">-- Seçin --</option></select>
-          </div>
-          <div class="fg">
-            <label>Başlangıç *</label>
-            <input type="datetime-local" id="log-baslangic"/>
-          </div>
-          <div class="fg">
-            <label>Bitiş (boş = devam ediyor)</label>
-            <input type="datetime-local" id="log-bitis"/>
-          </div>
+          <div class="fg"><label>Kullanıcı *</label><select id="log-kullanici"></select></div>
+          <div class="fg"><label>Proje</label><select id="log-proje" onchange="onLogProjeChange()"><option value="">-- Günlük İş --</option></select></div>
+          <div class="fg"><label>Alt Proje</label><select id="log-altproje"><option value="">-- Yok --</option></select></div>
+          <div class="fg s3"><label>Başlık *</label><input type="text" id="log-baslik" placeholder="Yapılan işin kısa açıklaması"/></div>
+          <div class="fg s3"><label>Açıklama</label><textarea id="log-aciklama"></textarea></div>
+          <div class="fg"><label>Ait Olduğu Birim *</label><select id="log-birim"><option value="">-- Seçin --</option></select></div>
+          <div class="fg"><label>Başlangıç *</label><input type="datetime-local" id="log-baslangic"/></div>
+          <div class="fg"><label>Bitiş</label><input type="datetime-local" id="log-bitis"/></div>
         </div>
         <div style="margin-top:12px;display:flex;gap:8px">
           <button class="btn btn-primary" onclick="addLog()">💾 Kaydet</button>
@@ -214,11 +191,11 @@ tr:hover td{background:#f9fafb}
       <div class="card">
         <div class="card-title">➕ Yeni Proje</div>
         <div class="g2">
-          <div class="fg"><label>Proje Adı *</label><input type="text" id="proje-ad" placeholder="Proje adı"/></div>
-          <div class="fg"><label>Tip *</label><select id="proje-tip"><option value="Geliştirme">Geliştirme</option><option value="Günlük İş">Günlük İş</option></select></div>
+          <div class="fg"><label>Proje Adı *</label><input type="text" id="proje-ad"/></div>
+          <div class="fg"><label>Tip *</label><select id="proje-tip"><option>Geliştirme</option><option>Günlük İş</option></select></div>
           <div class="fg"><label>Ait Olduğu Birim</label><select id="proje-birim"><option value="">-- Seçin --</option></select></div>
           <div class="fg"><label>Durum</label><select id="proje-durum"><option>Aktif</option><option>Beklemede</option><option>Tamamlandı</option></select></div>
-          <div class="fg s2"><label>Açıklama</label><textarea id="proje-aciklama" placeholder="Proje detayları"></textarea></div>
+          <div class="fg s2"><label>Açıklama</label><textarea id="proje-aciklama"></textarea></div>
         </div>
         <div style="margin-top:12px"><button class="btn btn-primary" onclick="addProje()">💾 Kaydet</button></div>
       </div>
@@ -233,8 +210,8 @@ tr:hover td{background:#f9fafb}
       <div class="card">
         <div class="card-title">🔍 Rapor Filtresi</div>
         <div class="g3">
-          <div class="fg"><label>Başlangıç Tarihi</label><input type="date" id="rapor-bas"/></div>
-          <div class="fg"><label>Bitiş Tarihi</label><input type="date" id="rapor-bit"/></div>
+          <div class="fg"><label>Başlangıç</label><input type="date" id="rapor-bas"/></div>
+          <div class="fg"><label>Bitiş</label><input type="date" id="rapor-bit"/></div>
           <div class="fg"><label>Birim</label><select id="rapor-birim"><option value="">Tümü</option></select></div>
           <div class="fg"><label>Kullanıcı</label><select id="rapor-kullanici"><option value="">Tümü</option></select></div>
           <div class="fg"><label>Proje</label><select id="rapor-proje"><option value="">Tümü</option></select></div>
@@ -260,7 +237,7 @@ tr:hover td{background:#f9fafb}
       <div class="card">
         <div class="card-title">➕ Yeni Birim</div>
         <div class="g2">
-          <div class="fg"><label>Birim Adı *</label><input type="text" id="birim-ad" placeholder="Muhasebe, Satın Alma..."/></div>
+          <div class="fg"><label>Birim Adı *</label><input type="text" id="birim-ad"/></div>
           <div class="fg"><label>Açıklama</label><input type="text" id="birim-aciklama"/></div>
         </div>
         <div style="margin-top:12px"><button class="btn btn-primary" onclick="addBirim()">💾 Kaydet</button></div>
@@ -278,7 +255,7 @@ tr:hover td{background:#f9fafb}
         <div class="g3">
           <div class="fg"><label>Ad *</label><input type="text" id="k-ad"/></div>
           <div class="fg"><label>Soyad *</label><input type="text" id="k-soyad"/></div>
-          <div class="fg"><label>Google E-posta *</label><input type="email" id="k-email" placeholder="ornek@gmail.com"/></div>
+          <div class="fg"><label>E-posta *</label><input type="email" id="k-email"/></div>
           <div class="fg"><label>Rol</label><select id="k-rol"><option value="Normal">Normal</option><option value="Yonetici">Yönetici</option></select></div>
         </div>
         <div style="margin-top:12px"><button class="btn btn-primary" onclick="addKullanici()">💾 Kaydet</button></div>
@@ -293,13 +270,14 @@ tr:hover td{background:#f9fafb}
     <div id="page-ayarlar" class="hidden">
       <div class="card">
         <div class="card-title">⚙️ API Ayarları</div>
-        <div class="fg" style="max-width:600px">
-          <label>Google Apps Script Web App URL</label>
-          <input type="text" id="api-url-input" placeholder="https://script.google.com/macros/s/..."/>
+        <div class="fg" style="max-width:600px;margin-bottom:12px">
+          <label>Google Apps Script URL</label>
+          <input type="text" id="api-url-input"/>
         </div>
-        <div style="margin-top:12px"><button class="btn btn-primary" onclick="saveApiUrl()">Kaydet</button></div>
+        <button class="btn btn-primary" onclick="saveApiUrl()">Kaydet</button>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -307,123 +285,89 @@ tr:hover td{background:#f9fafb}
 // ============================================================
 // STATE
 // ============================================================
-const APP_VERSION = '2.1';
+const APP_VERSION = '3.0';
 let API_URL = localStorage.getItem('erp_api_url') || '';
 let ME = null;
 let cache = { birimler:[], kullanicilar:[], projeler:[], loglar:[], atamalar:[] };
 let dragSrc = null;
 let autoRefreshTimer = null;
-const AUTO_REFRESH_MS = 5 * 60 * 1000; // 5 dakika
-
-// Versiyon değişmişse cache temizle
-function checkVersion() {
-  const storedVersion = localStorage.getItem('erp_version');
-  if (storedVersion !== APP_VERSION) {
-    clearAllCache();
-    localStorage.setItem('erp_version', APP_VERSION);
-    console.log('Yeni versiyon tespit edildi, cache temizlendi:', APP_VERSION);
-  }
-}
-
-function clearAllCache() {
-  cache = { birimler:[], kullanicilar:[], projeler:[], loglar:[], atamalar:[] };
-  // localStorage'dan sadece cache ile ilgili olanları temizle (API URL ve versiyon korunsun)
-  const keysToKeep = ['erp_api_url', 'erp_version'];
-  Object.keys(localStorage).forEach(key => {
-    if (!keysToKeep.includes(key)) localStorage.removeItem(key);
-  });
-}
-
-function startAutoRefresh() {
-  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-  autoRefreshTimer = setInterval(async () => {
-    clearAllCache();
-    await refreshAll();
-    showRefreshIndicator();
-  }, AUTO_REFRESH_MS);
-}
-
-function showRefreshIndicator() {
-  const el = document.getElementById('refresh-indicator');
-  if (!el) return;
-  el.textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit'});
-}
-
-async function manualRefresh() {
-  const btn = document.getElementById('refresh-btn');
-  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
-  clearAllCache();
-  await refreshAll();
-  showRefreshIndicator();
-  if (btn) { btn.textContent = '🔄'; btn.disabled = false; }
-  showAlert('Veriler güncellendi.');
-}
 
 // ============================================================
 // INIT
 // ============================================================
-window.onload = async () => {
-  checkVersion();
-  if (!API_URL) {
-    // API URL yok — giriş ekranında URL alanını göster
-    document.getElementById('api-url-section').classList.remove('hidden');
-    document.getElementById('login-btn').classList.add('hidden');
-    document.getElementById('login-desc').textContent = 'Önce Apps Script URL\'sini girin.';
-    document.getElementById('login-screen').classList.remove('hidden');
-    return;
+window.onload = () => {
+  // Versiyon kontrolü
+  if (localStorage.getItem('erp_version') !== APP_VERSION) {
+    clearCache();
+    localStorage.setItem('erp_version', APP_VERSION);
   }
-  await doLogin();
+  // Giriş ekranını göster
+  if (!API_URL) {
+    showUrlStep();
+  } else {
+    showLoginStep();
+  }
 };
 
-function saveApiUrlFromLogin() {
+function showUrlStep() {
+  document.getElementById('step-url').classList.remove('hidden');
+  document.getElementById('step-login').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+}
+
+function showLoginStep() {
+  document.getElementById('step-url').classList.add('hidden');
+  document.getElementById('step-login').classList.remove('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  // Kayıtlı e-posta varsa doldur
+  const savedEmail = localStorage.getItem('erp_email') || '';
+  if (savedEmail) document.getElementById('login-email').value = savedEmail;
+}
+
+function saveUrlAndNext() {
   const url = document.getElementById('login-api-url').value.trim();
-  if (!url) { showLoginError('URL boş olamaz.'); return; }
+  if (!url || !url.includes('script.google.com')) {
+    showLoginError('Geçerli bir Apps Script URL girin.');
+    return;
+  }
   API_URL = url;
   localStorage.setItem('erp_api_url', url);
-  document.getElementById('api-url-section').classList.add('hidden');
-  document.getElementById('login-btn').classList.remove('hidden');
-  document.getElementById('login-desc').textContent = 'Google hesabınızla giriş yapın.';
-  doLogin();
+  showLoginStep();
 }
 
 async function doLogin() {
-  const btn = document.getElementById('login-btn');
-  if (btn) { btn.textContent = '⏳ Giriş yapılıyor...'; btn.disabled = true; }
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) { showLoginError('E-posta adresinizi girin.'); return; }
+  if (!email.includes('@')) { showLoginError('Geçerli bir e-posta girin.'); return; }
 
-  const res = await api({ action: 'getMe' });
+  const btn = document.querySelector('#step-login .btn-primary');
+  btn.textContent = '⏳ Giriş yapılıyor...'; btn.disabled = true;
 
-  if (btn) { btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Google ile Giriş Yap`; btn.disabled = false; }
+  const res = await api({ action: 'getMe', email });
+
+  btn.textContent = '🚀 Giriş Yap'; btn.disabled = false;
 
   if (!res || res.error) {
-    // Apps Script oturumu yoksa Google'a yönlendir
-    if (!res || res.error?.includes('Kimlik') || res.error?.includes('kayıtlı değil')) {
-      showLoginError(res?.error || 'Giriş başarısız. Sayfayı yenileyip tekrar deneyin.');
-    } else {
-      showLoginError(res?.error || 'Bağlantı hatası.');
-    }
+    showLoginError(res?.error || 'Giriş başarısız. Lütfen tekrar deneyin.');
     return;
   }
 
   ME = res;
+  localStorage.setItem('erp_email', email);
   document.getElementById('login-screen').classList.add('hidden');
   document.getElementById('user-name').textContent = ME.Ad + ' ' + ME.Soyad;
   document.getElementById('user-badge').innerHTML = ME.isAdmin
     ? '<span class="badge b-purple">Yönetici</span>'
     : '<span class="badge b-blue">Normal</span>';
   if (ME.isAdmin) document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+
   await refreshAll();
   startAutoRefresh();
 }
 
 function showLoginError(msg) {
-  document.getElementById('login-screen').classList.remove('hidden');
   const el = document.getElementById('login-error');
   el.textContent = msg; el.classList.remove('hidden');
-}
-
-async function refreshAll() {
-  await Promise.all([loadBirimler(), loadKullanicilar(), loadProjeler(), loadLoglar()]);
-  loadDashboard();
 }
 
 // ============================================================
@@ -441,6 +385,35 @@ async function api(params) {
 }
 
 // ============================================================
+// CACHE & REFRESH
+// ============================================================
+function clearCache() {
+  cache = { birimler:[], kullanicilar:[], projeler:[], loglar:[], atamalar:[] };
+}
+
+async function refreshAll() {
+  await Promise.all([loadBirimler(), loadKullanicilar(), loadProjeler(), loadLoglar(), loadAtamalar()]);
+  loadDashboard();
+}
+
+function startAutoRefresh() {
+  if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+  autoRefreshTimer = setInterval(async () => {
+    clearCache();
+    await refreshAll();
+    const el = document.getElementById('refresh-indicator');
+    if (el) el.textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  }, 5 * 60 * 1000);
+}
+
+async function manualRefresh() {
+  clearCache();
+  await refreshAll();
+  document.getElementById('refresh-indicator').textContent = 'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+  showAlert('Veriler güncellendi.');
+}
+
+// ============================================================
 // NAV
 // ============================================================
 const pages = ['dashboard','log','projeler','rapor','birimler','kullanicilar','ayarlar'];
@@ -453,8 +426,8 @@ function showPage(name, el) {
   document.getElementById('page-title').textContent = titles[name];
   if (el) el.classList.add('active');
   if (name==='log') { populateLogDropdowns(); renderLoglar(); }
-  if (name==='projeler') { populateProjeBirim(); renderProjeler(); }
-  if (name==='rapor') { populateRaporDropdowns(); }
+  if (name==='projeler') { populateBirimSelect('proje-birim'); renderProjeler(); }
+  if (name==='rapor') populateRaporDropdowns();
   if (name==='birimler') renderBirimler();
   if (name==='kullanicilar') renderKullanicilar();
   if (name==='ayarlar') document.getElementById('api-url-input').value = API_URL;
@@ -468,161 +441,125 @@ function showAlert(msg, type='success') {
 }
 
 function saveApiUrl() {
-  const url = document.getElementById('api-url-input').value.trim();
-  if (!url) return showAlert('URL boş olamaz.', 'error');
-  API_URL = url;
+  API_URL = document.getElementById('api-url-input').value.trim();
   localStorage.setItem('erp_api_url', API_URL);
-  showAlert('API URL kaydedildi.');
+  showAlert('Kaydedildi.');
 }
 
 // ============================================================
 // BİRİMLER
 // ============================================================
-async function loadBirimler() {
-  const d = await api({action:'getBirimler'});
-  if (d) cache.birimler = d;
-}
+async function loadBirimler() { const d=await api({action:'getBirimler'}); if(d) cache.birimler=d; }
 async function addBirim() {
-  const ad = document.getElementById('birim-ad').value.trim();
-  if (!ad) return showAlert('Birim adı zorunlu.','error');
-  const r = await api({action:'addBirim',ad,aciklama:document.getElementById('birim-aciklama').value});
-  if (r) { showAlert('Birim eklendi.'); document.getElementById('birim-ad').value=''; document.getElementById('birim-aciklama').value=''; await loadBirimler(); renderBirimler(); populateAllDropdowns(); }
+  const ad=document.getElementById('birim-ad').value.trim();
+  if(!ad) return showAlert('Birim adı zorunlu.','error');
+  const r=await api({action:'addBirim',ad,aciklama:document.getElementById('birim-aciklama').value});
+  if(r){showAlert('Birim eklendi.');document.getElementById('birim-ad').value='';document.getElementById('birim-aciklama').value='';await loadBirimler();renderBirimler();populateAllDropdowns();}
 }
 async function deleteBirim(id) {
-  if (!confirm('Silmek istediğinize emin misiniz?')) return;
-  const r = await api({action:'deleteBirim',id});
-  if (r) { showAlert('Silindi.'); await loadBirimler(); renderBirimler(); populateAllDropdowns(); }
+  if(!confirm('Silmek istediğinize emin misiniz?')) return;
+  const r=await api({action:'deleteBirim',id});
+  if(r){showAlert('Silindi.');await loadBirimler();renderBirimler();populateAllDropdowns();}
 }
 function renderBirimler() {
-  document.getElementById('birim-tbody').innerHTML = cache.birimler.length===0
-    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-sec);padding:24px">Henüz birim eklenmemiş.</td></tr>'
-    : cache.birimler.map(b=>`<tr><td><code style="font-size:11px">${b.ID}</code></td><td><strong>${b.Ad}</strong></td><td>${b.Aciklama||'-'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteBirim('${b.ID}')">🗑</button></td></tr>`).join('');
+  document.getElementById('birim-tbody').innerHTML=cache.birimler.length===0
+    ?'<tr><td colspan="4" style="text-align:center;color:var(--text-sec);padding:24px">Henüz birim eklenmemiş.</td></tr>'
+    :cache.birimler.map(b=>`<tr><td><code style="font-size:11px">${b.ID}</code></td><td><strong>${b.Ad}</strong></td><td>${b.Aciklama||'-'}</td><td><button class="btn btn-danger btn-sm" onclick="deleteBirim('${b.ID}')">🗑</button></td></tr>`).join('');
 }
 
 // ============================================================
 // KULLANICILAR
 // ============================================================
-async function loadKullanicilar() {
-  if (!ME?.isAdmin) return;
-  const d = await api({action:'getKullanicilar'});
-  if (d) cache.kullanicilar = d;
-}
+async function loadKullanicilar() { if(!ME?.isAdmin) return; const d=await api({action:'getKullanicilar'}); if(d) cache.kullanicilar=d; }
 async function addKullanici() {
-  const ad=document.getElementById('k-ad').value.trim(), soyad=document.getElementById('k-soyad').value.trim(), email=document.getElementById('k-email').value.trim(), rol=document.getElementById('k-rol').value;
-  if (!ad||!soyad||!email) return showAlert('Ad, soyad ve e-posta zorunlu.','error');
-  const r = await api({action:'addKullanici',ad,soyad,email,rol,olusturanEmail:ME.Email});
-  if (r) { showAlert('Kullanıcı eklendi.'); ['k-ad','k-soyad','k-email'].forEach(id=>document.getElementById(id).value=''); await loadKullanicilar(); renderKullanicilar(); populateAllDropdowns(); }
+  const ad=document.getElementById('k-ad').value.trim(),soyad=document.getElementById('k-soyad').value.trim(),email=document.getElementById('k-email').value.trim(),rol=document.getElementById('k-rol').value;
+  if(!ad||!soyad||!email) return showAlert('Ad, soyad ve e-posta zorunlu.','error');
+  const r=await api({action:'addKullanici',ad,soyad,email,rol});
+  if(r){showAlert('Kullanıcı eklendi.');['k-ad','k-soyad','k-email'].forEach(id=>document.getElementById(id).value='');await loadKullanicilar();renderKullanicilar();populateAllDropdowns();}
 }
-async function updateKullaniciRol(id, rol) {
-  const r = await api({action:'updateKullanici',id,rol});
-  if (r) { showAlert('Rol güncellendi.'); await loadKullanicilar(); renderKullanicilar(); }
+async function updateKullaniciRol(id,rol) {
+  const r=await api({action:'updateKullanici',id,rol});
+  if(r){showAlert('Rol güncellendi.');await loadKullanicilar();renderKullanicilar();}
 }
 async function deleteKullanici(id) {
-  if (!confirm('Silmek istediğinize emin misiniz?')) return;
-  const r = await api({action:'deleteKullanici',id});
-  if (r) { showAlert('Silindi.'); await loadKullanicilar(); renderKullanicilar(); populateAllDropdowns(); }
+  if(!confirm('Silmek istediğinize emin misiniz?')) return;
+  const r=await api({action:'deleteKullanici',id});
+  if(r){showAlert('Silindi.');await loadKullanicilar();renderKullanicilar();populateAllDropdowns();}
 }
 function renderKullanicilar() {
-  document.getElementById('k-tbody').innerHTML = cache.kullanicilar.length===0
-    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-sec);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
-    : cache.kullanicilar.map(u=>`<tr>
-        <td><strong>${u.Ad} ${u.Soyad}</strong></td>
-        <td>${u.Email}</td>
-        <td><select class="badge ${u.Rol==='Yonetici'?'b-purple':'b-blue'}" onchange="updateKullaniciRol('${u.ID}',this.value)" style="border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:500">
-          <option ${u.Rol==='Normal'?'selected':''}>Normal</option>
-          <option value="Yonetici" ${u.Rol==='Yonetici'?'selected':''}>Yönetici</option>
-        </select></td>
-        <td><button class="btn btn-danger btn-sm" onclick="deleteKullanici('${u.ID}')">🗑</button></td>
-      </tr>`).join('');
+  document.getElementById('k-tbody').innerHTML=cache.kullanicilar.length===0
+    ?'<tr><td colspan="4" style="text-align:center;color:var(--text-sec);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
+    :cache.kullanicilar.map(u=>`<tr><td><strong>${u.Ad} ${u.Soyad}</strong></td><td>${u.Email}</td>
+      <td><select onchange="updateKullaniciRol('${u.ID}',this.value)" style="font-size:12px;padding:4px 8px">
+        <option ${u.Rol==='Normal'?'selected':''} value="Normal">Normal</option>
+        <option ${u.Rol==='Yonetici'?'selected':''} value="Yonetici">Yönetici</option>
+      </select></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteKullanici('${u.ID}')">🗑</button></td></tr>`).join('');
 }
 
 // ============================================================
 // PROJELER
 // ============================================================
-async function loadProjeler() {
-  const d = await api({action:'getProjeler'});
-  if (d) cache.projeler = d;
-}
-function populateProjeBirim() {
-  const sel = document.getElementById('proje-birim');
-  const val = sel.value;
-  sel.innerHTML = '<option value="">-- Seçin --</option>';
-  cache.birimler.forEach(b => { const o=document.createElement('option'); o.value=b.ID; o.textContent=b.Ad; if(b.ID==val)o.selected=true; sel.appendChild(o); });
-}
+async function loadProjeler() { const d=await api({action:'getProjeler'}); if(d) cache.projeler=d; }
+async function loadAtamalar() { const d=await api({action:'getAtamalar'}); if(d) cache.atamalar=d; }
+
 async function addProje() {
-  const ad = document.getElementById('proje-ad').value.trim();
-  if (!ad) return showAlert('Proje adı zorunlu.','error');
-  const r = await api({action:'addProje',ad,tip:document.getElementById('proje-tip').value,birimId:document.getElementById('proje-birim').value,durum:document.getElementById('proje-durum').value,aciklama:document.getElementById('proje-aciklama').value});
-  if (r) { showAlert(`Proje eklendi. Kod: ${r.kod}`); document.getElementById('proje-ad').value=''; document.getElementById('proje-aciklama').value=''; await loadProjeler(); renderProjeler(); populateAllDropdowns(); }
+  const ad=document.getElementById('proje-ad').value.trim();
+  if(!ad) return showAlert('Proje adı zorunlu.','error');
+  const r=await api({action:'addProje',ad,tip:document.getElementById('proje-tip').value,birimId:document.getElementById('proje-birim').value,durum:document.getElementById('proje-durum').value,aciklama:document.getElementById('proje-aciklama').value,olusturanId:ME?.ID});
+  if(r){showAlert('Proje eklendi. Kod: '+r.kod);document.getElementById('proje-ad').value='';document.getElementById('proje-aciklama').value='';await loadProjeler();renderProjeler();populateAllDropdowns();}
+}
+async function updateProjeDurum(id,durum) {
+  await api({action:'updateProje',id,durum}); await loadProjeler(); renderProjeler();
 }
 async function deleteProje(id) {
-  if (!confirm('Projeyi silmek istediğinize emin misiniz? (Veriler korunacak)')) return;
-  const r = await api({action:'deleteProje',id});
-  if (r) { showAlert('Proje silindi.'); await loadProjeler(); renderProjeler(); }
+  if(!confirm('Projeyi silmek istediğinize emin misiniz? (Veriler korunur)')) return;
+  const r=await api({action:'deleteProje',id});
+  if(r){showAlert('Proje silindi.');await loadProjeler();renderProjeler();}
 }
-async function updateProjeDurum(id, durum) {
-  const r = await api({action:'updateProje',id,durum});
-  if (r) { showAlert('Güncellendi.'); await loadProjeler(); renderProjeler(); }
-}
-
-// Alt proje
 async function addAltProje(projeId) {
-  const ad = prompt('Alt proje adı:');
-  if (!ad) return;
-  const r = await api({action:'addAltProje',ad,projeId,birimId:cache.projeler.find(p=>p.ID==projeId)?.BirimID||'',tip:'Geliştirme'});
-  if (r) { showAlert(`Alt proje eklendi. Kod: ${r.kod}`); await loadProjeler(); renderProjeler(); }
+  const ad=prompt('Alt proje adı:'); if(!ad) return;
+  const ana=cache.projeler.find(p=>p.ID==projeId);
+  const r=await api({action:'addAltProje',ad,projeId,birimId:ana?.BirimID||'',olusturanId:ME?.ID});
+  if(r){showAlert('Alt proje eklendi. Kod: '+r.kod);await loadProjeler();renderProjeler();}
 }
-
-// Atama
-async function toggleAtama(projeId, kullaniciId, checked) {
-  if (checked) {
-    await api({action:'addAtama',projeId,kullaniciId,atayanId:ME.ID});
-    showAlert('Atama yapıldı.');
-  } else {
-    const atama = cache.atamalar.find(a=>a.ProjeID==projeId&&a.KullaniciID==kullaniciId);
-    if (atama) { await api({action:'deleteAtama',id:atama.ID}); showAlert('Atama kaldırıldı.'); }
-  }
-  const d = await api({action:'getAtamalar'});
-  if (d) cache.atamalar = d;
-  renderProjeler();
+async function toggleAtama(projeId,kullaniciId,checked) {
+  if(checked){ await api({action:'addAtama',projeId,kullaniciId,atayanId:ME?.ID}); }
+  else{ const a=cache.atamalar.find(x=>x.ProjeID==projeId&&x.KullaniciID==kullaniciId); if(a) await api({action:'deleteAtama',id:a.ID}); }
+  await loadAtamalar(); renderProjeler();
 }
-
 function renderProjeler() {
-  const birimMap = {};
+  const birimMap={};
   cache.birimler.forEach(b=>birimMap[b.ID]=b.Ad);
-  const anaProjeler = cache.projeler.filter(p=>!p.AltProjeID||p.AltProjeID==='');
-
-  document.getElementById('proje-tbody').innerHTML = anaProjeler.length===0
-    ? '<tr><td colspan="7" style="text-align:center;color:var(--text-sec);padding:24px">Henüz proje eklenmemiş.</td></tr>'
-    : anaProjeler.map(p=>{
-        const altlar = cache.projeler.filter(a=>a.AltProjeID==p.ID);
-        const tipBadge = p.Tip==='Geliştirme'?'b-blue':'b-gray';
-        const durumBadge = {Aktif:'b-green',Beklemede:'b-yellow',Tamamlandı:'b-gray'}[p.Durum]||'b-gray';
-        const atananlar = (cache.atamalar||[]).filter(a=>a.ProjeID==p.ID);
-        const atamaTags = ME?.isAdmin
-          ? cache.kullanicilar.map(u=>`<label style="display:inline-flex;align-items:center;gap:4px;margin:2px;font-size:12px;cursor:pointer"><input type="checkbox" ${atananlar.find(a=>a.KullaniciID==u.ID)?'checked':''} onchange="toggleAtama('${p.ID}','${u.ID}',this.checked)"> ${u.Ad}</label>`).join('')
-          : atananlar.map(a=>{const u=cache.kullanicilar.find(x=>x.ID==a.KullaniciID); return u?`<span class="atama-tag">👤 ${u.Ad}</span>`:''}).join('');
-        const altProjeRows = altlar.map(a=>`<tr style="background:#f9fafb">
-          <td style="padding-left:32px"><span style="color:var(--text-sec)">↳</span> <code style="font-size:11px;color:var(--primary)">${a.Kod}</code></td>
-          <td style="padding-left:8px">${a.Ad}</td>
-          <td><span class="badge b-purple">Alt Proje</span></td>
+  const anaProjeler=cache.projeler.filter(p=>!p.AltProjeID||p.AltProjeID==='');
+  document.getElementById('proje-tbody').innerHTML=anaProjeler.length===0
+    ?'<tr><td colspan="7" style="text-align:center;color:var(--text-sec);padding:24px">Henüz proje eklenmemiş.</td></tr>'
+    :anaProjeler.map(p=>{
+        const altlar=cache.projeler.filter(a=>a.AltProjeID==p.ID);
+        const tipBadge=p.Tip==='Geliştirme'?'b-blue':'b-gray';
+        const durumBadge={Aktif:'b-green',Beklemede:'b-yellow',Tamamlandı:'b-gray'}[p.Durum]||'b-gray';
+        const atananlar=cache.atamalar.filter(a=>a.ProjeID==p.ID);
+        const atamaTags=ME?.isAdmin
+          ?cache.kullanicilar.map(u=>`<label style="display:inline-flex;align-items:center;gap:4px;margin:2px;font-size:12px;cursor:pointer"><input type="checkbox" ${atananlar.find(a=>a.KullaniciID==u.ID)?'checked':''} onchange="toggleAtama('${p.ID}','${u.ID}',this.checked)"> ${u.Ad}</label>`).join('')
+          :atananlar.map(a=>{const u=cache.kullanicilar.find(x=>x.ID==a.KullaniciID);return u?`<span class="badge b-blue">👤 ${u.Ad}</span>`:''}).join('');
+        const altRows=altlar.map(a=>`<tr style="background:#f9fafb">
+          <td style="padding-left:32px">↳ <code style="font-size:11px;color:var(--primary)">${a.Kod}</code></td>
+          <td>${a.Ad}</td><td><span class="badge b-purple">Alt</span></td>
           <td>${birimMap[a.BirimID]||'-'}</td>
           <td><span class="badge ${durumBadge}">${a.Durum}</span></td>
           <td></td>
-          <td>${ME?.isAdmin||a.OlusturanID==ME?.ID?`<button class="btn btn-danger btn-sm" onclick="deleteProje('${a.ID}')">🗑</button>`:''}
-          </td></tr>`).join('');
+          <td><button class="btn btn-danger btn-sm" onclick="deleteProje('${a.ID}')">🗑</button></td></tr>`).join('');
         return `<tr>
           <td><code style="font-size:12px;font-weight:600;color:var(--primary)">${p.Kod}</code></td>
           <td><strong>${p.Ad}</strong></td>
           <td><span class="badge ${tipBadge}">${p.Tip}</span></td>
           <td>${birimMap[p.BirimID]||'-'}</td>
           <td><select class="badge ${durumBadge}" onchange="updateProjeDurum('${p.ID}',this.value)" style="border:none;background:transparent;cursor:pointer;font-size:11px;font-weight:500">${['Aktif','Beklemede','Tamamlandı'].map(d=>`<option ${p.Durum==d?'selected':''}>${d}</option>`).join('')}</select></td>
-          <td style="max-width:200px">${atamaTags}</td>
+          <td style="max-width:180px">${atamaTags}</td>
           <td style="white-space:nowrap">
             <button class="btn btn-outline btn-sm" onclick="addAltProje('${p.ID}')">+ Alt</button>
-            ${ME?.isAdmin||p.OlusturanID==ME?.ID?`<button class="btn btn-danger btn-sm" onclick="deleteProje('${p.ID}')">🗑</button>`:''}
-          </td>
-        </tr>${altProjeRows}`;
+            <button class="btn btn-danger btn-sm" onclick="deleteProje('${p.ID}')">🗑</button>
+          </td></tr>${altRows}`;
       }).join('');
 }
 
@@ -630,91 +567,60 @@ function renderProjeler() {
 // LOGLAR
 // ============================================================
 async function loadLoglar() {
-  const d = await api({action:'getLoglar'});
-  if (d) cache.loglar = d;
+  const params = {action:'getLoglar'};
+  if (!ME?.isAdmin) params.kullaniciId = ME?.ID;
+  const d=await api(params); if(d) cache.loglar=d;
 }
-
 function onLogProjeChange() {
-  const projeId = document.getElementById('log-proje').value;
-  const birimSel = document.getElementById('log-birim');
-  const altSel = document.getElementById('log-altproje');
-
-  // Alt projeler
-  altSel.innerHTML = '<option value="">-- Yok --</option>';
-  if (projeId) {
-    cache.projeler.filter(p=>p.AltProjeID==projeId).forEach(a=>{
-      const o=document.createElement('option'); o.value=a.ID; o.textContent=a.Kod+' - '+a.Ad; altSel.appendChild(o);
-    });
-    // Birim otomatik doldur
-    const proje = cache.projeler.find(p=>p.ID==projeId);
-    if (proje?.BirimID) birimSel.value = proje.BirimID;
+  const projeId=document.getElementById('log-proje').value;
+  const altSel=document.getElementById('log-altproje');
+  altSel.innerHTML='<option value="">-- Yok --</option>';
+  if(projeId){
+    cache.projeler.filter(p=>p.AltProjeID==projeId).forEach(a=>{const o=document.createElement('option');o.value=a.ID;o.textContent=a.Kod+' - '+a.Ad;altSel.appendChild(o);});
+    const proje=cache.projeler.find(p=>p.ID==projeId);
+    if(proje?.BirimID) document.getElementById('log-birim').value=proje.BirimID;
   }
 }
-
-function onLogKullaniciChange() {
-  if (!ME?.isAdmin) return; // normal kullanıcı değiştiremez
-}
-
 function populateLogDropdowns() {
-  // Kullanıcı
-  const kSel = document.getElementById('log-kullanici');
-  kSel.innerHTML = '';
-  if (ME?.isAdmin) {
-    cache.kullanicilar.forEach(u=>{ const o=document.createElement('option'); o.value=u.ID; o.textContent=u.Ad+' '+u.Soyad; kSel.appendChild(o); });
+  const kSel=document.getElementById('log-kullanici');
+  kSel.innerHTML='';
+  if(ME?.isAdmin){
+    cache.kullanicilar.forEach(u=>{const o=document.createElement('option');o.value=u.ID;o.textContent=u.Ad+' '+u.Soyad;kSel.appendChild(o);});
   } else {
-    const o=document.createElement('option'); o.value=ME.ID; o.textContent=ME.Ad+' '+ME.Soyad; kSel.appendChild(o);
-    kSel.disabled = true;
+    const o=document.createElement('option');o.value=ME.ID;o.textContent=ME.Ad+' '+ME.Soyad;kSel.appendChild(o);
+    kSel.disabled=true;
   }
-
-  // Proje
-  const pSel = document.getElementById('log-proje');
-  pSel.innerHTML = '<option value="">-- Günlük İş --</option>';
-  cache.projeler.filter(p=>p.Durum==='Aktif'&&(!p.AltProjeID||p.AltProjeID==='')).forEach(p=>{
-    const o=document.createElement('option'); o.value=p.ID; o.textContent=p.Kod+' - '+p.Ad; pSel.appendChild(o);
-  });
-
-  // Birim
-  const bSel = document.getElementById('log-birim');
-  bSel.innerHTML = '<option value="">-- Seçin --</option>';
-  cache.birimler.forEach(b=>{ const o=document.createElement('option'); o.value=b.ID; o.textContent=b.Ad; bSel.appendChild(o); });
-
-  // Filter kullanici
-  const fk = document.getElementById('filter-kullanici');
-  fk.innerHTML = ME?.isAdmin ? '<option value="">Tüm Kullanıcılar</option>' : '';
-  if (ME?.isAdmin) cache.kullanicilar.forEach(u=>{ const o=document.createElement('option'); o.value=u.ID; o.textContent=u.Ad+' '+u.Soyad; fk.appendChild(o); });
-  else { const o=document.createElement('option'); o.value=ME.ID; o.textContent=ME.Ad+' '+ME.Soyad; o.selected=true; fk.appendChild(o); fk.disabled=true; }
-
-  // Filter proje
-  const fp = document.getElementById('filter-proje');
-  fp.innerHTML = '<option value="">Tüm Projeler</option>';
-  cache.projeler.forEach(p=>{ const o=document.createElement('option'); o.value=p.ID; o.textContent=p.Kod+' - '+p.Ad; fp.appendChild(o); });
+  populateSelect('log-proje','<option value="">-- Günlük İş --</option>',cache.projeler.filter(p=>p.Durum==='Aktif'&&(!p.AltProjeID||p.AltProjeID==='')),p=>p.ID,p=>p.Kod+' - '+p.Ad);
+  populateBirimSelect('log-birim');
+  const fk=document.getElementById('filter-kullanici');
+  fk.innerHTML=ME?.isAdmin?'<option value="">Tüm Kullanıcılar</option>':'';
+  if(ME?.isAdmin) cache.kullanicilar.forEach(u=>{const o=document.createElement('option');o.value=u.ID;o.textContent=u.Ad+' '+u.Soyad;fk.appendChild(o);});
+  else{const o=document.createElement('option');o.value=ME.ID;o.textContent=ME.Ad+' '+ME.Soyad;o.selected=true;fk.appendChild(o);fk.disabled=true;}
+  populateSelect('filter-proje','<option value="">Tüm Projeler</option>',cache.projeler,p=>p.ID,p=>p.Kod+' - '+p.Ad);
 }
-
 async function addLog() {
-  const kullaniciId = document.getElementById('log-kullanici').value;
-  const baslik = document.getElementById('log-baslik').value.trim();
-  const baslangic = document.getElementById('log-baslangic').value;
-  const birimId = document.getElementById('log-birim').value;
-  const projeId = document.getElementById('log-proje').value;
-  if (!kullaniciId) return showAlert('Kullanıcı seçiniz.','error');
-  if (!baslik) return showAlert('Başlık zorunlu.','error');
-  if (!baslangic) return showAlert('Başlangıç zamanı zorunlu.','error');
-  if (!birimId) return showAlert('Birim seçiniz.','error');
-  const params = {action:'addLog',kullaniciId,baslik,projeId,altProjeId:document.getElementById('log-altproje').value,birimId,aciklama:document.getElementById('log-aciklama').value,baslangic:new Date(baslangic).toISOString(),bitis:document.getElementById('log-bitis').value?new Date(document.getElementById('log-bitis').value).toISOString():''};
-  const r = await api(params);
-  if (r) { showAlert('Log eklendi. Süre: '+formatSure(r.sureDakika)); ['log-baslik','log-aciklama','log-bitis'].forEach(id=>document.getElementById(id).value=''); await loadLoglar(); renderLoglar(); loadDashboard(); }
+  const kullaniciId=document.getElementById('log-kullanici').value;
+  const baslik=document.getElementById('log-baslik').value.trim();
+  const baslangic=document.getElementById('log-baslangic').value;
+  const birimId=document.getElementById('log-birim').value;
+  if(!kullaniciId) return showAlert('Kullanıcı seçiniz.','error');
+  if(!baslik) return showAlert('Başlık zorunlu.','error');
+  if(!baslangic) return showAlert('Başlangıç zamanı zorunlu.','error');
+  if(!birimId) return showAlert('Birim seçiniz.','error');
+  const r=await api({action:'addLog',kullaniciId,baslik,projeId:document.getElementById('log-proje').value,altProjeId:document.getElementById('log-altproje').value,birimId,aciklama:document.getElementById('log-aciklama').value,baslangic:new Date(baslangic).toISOString(),bitis:document.getElementById('log-bitis').value?new Date(document.getElementById('log-bitis').value).toISOString():''});
+  if(r){showAlert('Log eklendi. Süre: '+formatSure(r.sureDakika));['log-baslik','log-aciklama','log-bitis'].forEach(id=>document.getElementById(id).value='');await loadLoglar();renderLoglar();loadDashboard();}
 }
 async function bitisEkle(id) {
-  const r = await api({action:'updateLog',id,bitis:new Date().toISOString()});
-  if (r) { showAlert('Tamamlandı.'); await loadLoglar(); renderLoglar(); loadDashboard(); }
+  const r=await api({action:'updateLog',id,bitis:new Date().toISOString()});
+  if(r){showAlert('Tamamlandı.');await loadLoglar();renderLoglar();loadDashboard();}
 }
 async function deleteLog(id) {
-  if (!confirm('Logu silmek istediğinize emin misiniz?')) return;
-  const r = await api({action:'deleteLog',id});
-  if (r) { showAlert('Silindi.'); await loadLoglar(); renderLoglar(); loadDashboard(); }
+  if(!confirm('Logu silmek istediğinize emin misiniz?')) return;
+  const r=await api({action:'deleteLog',id});
+  if(r){showAlert('Silindi.');await loadLoglar();renderLoglar();loadDashboard();}
 }
 function renderLoglar() {
-  const birimMap={}, kullaniciMap={}, projeMap={};
+  const birimMap={},kullaniciMap={},projeMap={};
   cache.birimler.forEach(b=>birimMap[b.ID]=b.Ad);
   cache.kullanicilar.forEach(u=>kullaniciMap[u.ID]=u.Ad+' '+u.Soyad);
   cache.projeler.forEach(p=>projeMap[p.ID]=(p.Kod?p.Kod+' - ':'')+p.Ad);
@@ -739,8 +645,7 @@ function renderLoglar() {
         <td style="white-space:nowrap">
           ${aktif?`<button class="btn btn-success btn-sm" onclick="bitisEkle('${l.ID}')">⏹ Bitir</button> `:''}
           <button class="btn btn-danger btn-sm" onclick="deleteLog('${l.ID}')">🗑</button>
-        </td>
-      </tr>`;
+        </td></tr>`;
     }).join('');
 }
 
@@ -748,97 +653,71 @@ function renderLoglar() {
 // DASHBOARD
 // ============================================================
 async function loadDashboard() {
-  if (!ME) return;
-  const birimMap={}, kullaniciMap={}, projeMap={};
+  if(!ME) return;
+  const birimMap={},kullaniciMap={},projeMap={};
   cache.birimler.forEach(b=>birimMap[b.ID]=b.Ad);
   cache.kullanicilar.forEach(u=>kullaniciMap[u.ID]=u.Ad+' '+u.Soyad);
   cache.projeler.forEach(p=>projeMap[p.ID]=(p.Kod?p.Kod+' - ':'')+p.Ad);
-
-  const aktifler = cache.loglar.filter(l=>!l.Bitis&&(ME.isAdmin||l.KullaniciID==ME.ID));
-  const buHafta = new Date(); buHafta.setDate(buHafta.getDate()-7);
-  const haftalik = cache.loglar.filter(l=>l.Bitis&&new Date(l.Baslangic)>=buHafta&&(ME.isAdmin||l.KullaniciID==ME.ID));
-  const toplamSure = haftalik.reduce((s,l)=>s+(parseInt(l.SureDakika)||0),0);
-
+  const aktifler=cache.loglar.filter(l=>!l.Bitis);
+  const buHafta=new Date(); buHafta.setDate(buHafta.getDate()-7);
+  const haftalik=cache.loglar.filter(l=>l.Bitis&&new Date(l.Baslangic)>=buHafta);
+  const toplamSure=haftalik.reduce((s,l)=>s+(parseInt(l.SureDakika)||0),0);
   document.getElementById('dash-stats').innerHTML=`
     <div class="stat"><div class="stat-val">${aktifler.length}</div><div class="stat-lbl">Aktif Çalışma</div></div>
     <div class="stat"><div class="stat-val">${haftalik.length}</div><div class="stat-lbl">Bu Hafta Kayıt</div></div>
     <div class="stat"><div class="stat-val">${formatSure(toplamSure)}</div><div class="stat-lbl">Bu Hafta Toplam</div></div>
     <div class="stat"><div class="stat-val">${cache.projeler.filter(p=>p.Durum==='Aktif').length}</div><div class="stat-lbl">Aktif Proje</div></div>`;
-
   document.getElementById('aktif-loglar').innerHTML=aktifler.length===0
     ?'<p style="color:var(--text-sec);font-size:13px">Şu an aktif çalışma yok.</p>'
     :aktifler.map(l=>`<div class="active-log">
         <div class="active-log-info"><h4>${kullaniciMap[l.KullaniciID]||'-'} — ${l.Baslik}</h4>
         <p>${l.ProjeID?(projeMap[l.ProjeID]||'-'):'Günlük İş'} · ${birimMap[l.BirimID]||'-'} · ${new Date(l.Baslangic).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</p></div>
-        <button class="btn btn-success btn-sm" onclick="bitisEkle('${l.ID}')">⏹ Bitir</button>
-      </div>`).join('');
-
-  // Atanan işler - öncelik sırası (drag & drop)
-  const atamalarim = (cache.atamalar||[]).filter(a=>a.KullaniciID==ME.ID).sort((a,b)=>a.Oncelik-b.Oncelik);
-  const atananDiv = document.getElementById('atanan-isler');
-  atananDiv.innerHTML = atamalarim.length===0
-    ? '<p style="color:var(--text-sec);font-size:13px">Size atanmış iş bulunmuyor.</p>'
-    : atamalarim.map((a,i)=>{
-        const proje = cache.projeler.find(p=>p.ID==a.ProjeID);
+        <button class="btn btn-success btn-sm" onclick="bitisEkle('${l.ID}')">⏹ Bitir</button></div>`).join('');
+  const atamalarim=cache.atamalar.filter(a=>a.KullaniciID==ME.ID).sort((a,b)=>a.Oncelik-b.Oncelik);
+  document.getElementById('atanan-isler').innerHTML=atamalarim.length===0
+    ?'<p style="color:var(--text-sec);font-size:13px">Size atanmış iş bulunmuyor.</p>'
+    :atamalarim.map((a,i)=>{
+        const proje=cache.projeler.find(p=>p.ID==a.ProjeID);
         return `<div class="proje-item" draggable="true" data-id="${a.ID}" data-idx="${i}"
           ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dragDrop(event)" ondragend="dragEnd(event)">
           <div style="display:flex;align-items:center;gap:12px">
-            <span style="color:var(--text-sec);font-size:18px;cursor:grab">⠿</span>
-            <div>
-              <div style="font-weight:500">${i+1}. ${proje?.Kod||''} ${proje?.Ad||'Bilinmeyen'}</div>
-              <div style="font-size:12px;color:var(--text-sec)">${proje?.Tip||''} · ${proje?.Durum||''}</div>
-            </div>
+            <span style="color:var(--text-sec);font-size:18px">⠿</span>
+            <div><div style="font-weight:500">${i+1}. ${proje?.Kod||''} ${proje?.Ad||'Bilinmeyen'}</div>
+            <div style="font-size:12px;color:var(--text-sec)">${proje?.Tip||''} · ${proje?.Durum||''}</div></div>
           </div>
-          <span class="badge ${proje?.Durum==='Aktif'?'b-green':'b-gray'}">${proje?.Durum||''}</span>
-        </div>`;
+          <span class="badge ${proje?.Durum==='Aktif'?'b-green':'b-gray'}">${proje?.Durum||''}</span></div>`;
       }).join('');
-
-  const sonlar=[...cache.loglar].filter(l=>l.Bitis&&(ME.isAdmin||l.KullaniciID==ME.ID)).sort((a,b)=>new Date(b.Baslangic)-new Date(a.Baslangic)).slice(0,8);
+  const sonlar=[...cache.loglar].filter(l=>l.Bitis).sort((a,b)=>new Date(b.Baslangic)-new Date(a.Baslangic)).slice(0,8);
   document.getElementById('son-loglar-body').innerHTML=sonlar.map(l=>`<tr>
     <td>${new Date(l.Baslangic).toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</td>
     <td>${kullaniciMap[l.KullaniciID]||'-'}</td>
     <td>${l.ProjeID?(projeMap[l.ProjeID]||'-'):'Günlük İş'}</td>
     <td>${l.Baslik}</td><td>${formatSure(l.SureDakika)}</td></tr>`).join('');
-
-  // Atamaları yükle
-  const atd = await api({action:'getAtamalar'});
-  if (atd) { cache.atamalar = atd; loadDashboard(); }
 }
 
 // ============================================================
-// DRAG & DROP (öncelik sırası)
+// DRAG & DROP
 // ============================================================
-function dragStart(e) { dragSrc=e.currentTarget; e.currentTarget.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
-function dragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect='move'; }
-function dragEnd(e) { e.currentTarget.classList.remove('dragging'); }
-function dragDrop(e) {
-  e.preventDefault();
-  if (dragSrc===e.currentTarget) return;
-  const items = [...document.querySelectorAll('.proje-item')];
-  const srcIdx = items.indexOf(dragSrc);
-  const tgtIdx = items.indexOf(e.currentTarget);
-  if (srcIdx<tgtIdx) e.currentTarget.after(dragSrc); else e.currentTarget.before(dragSrc);
-}
-async function saveOncelik() {
-  const items = [...document.querySelectorAll('.proje-item')];
-  const siralam = items.map((el,i)=>({id:el.dataset.id,oncelik:i+1}));
-  const r = await api({action:'updateOncelik',siralam:JSON.stringify(siralam)});
-  if (r) showAlert('Öncelik sırası kaydedildi.');
+function dragStart(e){dragSrc=e.currentTarget;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function dragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move';}
+function dragEnd(e){e.currentTarget.classList.remove('dragging');}
+function dragDrop(e){e.preventDefault();if(dragSrc===e.currentTarget)return;const items=[...document.querySelectorAll('.proje-item')];const si=items.indexOf(dragSrc);const ti=items.indexOf(e.currentTarget);if(si<ti)e.currentTarget.after(dragSrc);else e.currentTarget.before(dragSrc);}
+async function saveOncelik(){
+  const items=[...document.querySelectorAll('.proje-item')];
+  const siralam=items.map((el,i)=>({id:el.dataset.id,oncelik:i+1}));
+  const r=await api({action:'updateOncelik',siralam:JSON.stringify(siralam)});
+  if(r) showAlert('Öncelik sırası kaydedildi.');
 }
 
 // ============================================================
 // RAPOR
 // ============================================================
-function populateRaporDropdowns() {
-  const rb=document.getElementById('rapor-birim'); rb.innerHTML='<option value="">Tümü</option>';
-  cache.birimler.forEach(b=>{const o=document.createElement('option');o.value=b.ID;o.textContent=b.Ad;rb.appendChild(o);});
-  const rk=document.getElementById('rapor-kullanici'); rk.innerHTML=ME?.isAdmin?'<option value="">Tümü</option>':'';
-  if(ME?.isAdmin) cache.kullanicilar.forEach(u=>{const o=document.createElement('option');o.value=u.ID;o.textContent=u.Ad+' '+u.Soyad;rk.appendChild(o);});
-  else{const o=document.createElement('option');o.value=ME.ID;o.textContent=ME.Ad+' '+ME.Soyad;o.selected=true;rk.appendChild(o);rk.disabled=true;}
-  const rp=document.getElementById('rapor-proje'); rp.innerHTML='<option value="">Tümü</option>';
-  cache.projeler.forEach(p=>{const o=document.createElement('option');o.value=p.ID;o.textContent=p.Kod+' - '+p.Ad;rp.appendChild(o);});
+function populateRaporDropdowns(){
+  populateBirimSelect('rapor-birim',true);
+  populateSelect('rapor-kullanici','<option value="">Tümü</option>',cache.kullanicilar,u=>u.ID,u=>u.Ad+' '+u.Soyad);
+  populateSelect('rapor-proje','<option value="">Tümü</option>',cache.projeler,p=>p.ID,p=>p.Kod+' - '+p.Ad);
 }
-async function loadRapor() {
+async function loadRapor(){
   const r=await api({action:'getRapor',baslangicTarih:document.getElementById('rapor-bas').value,bitisTarih:document.getElementById('rapor-bit').value,birimId:document.getElementById('rapor-birim').value,kullaniciId:document.getElementById('rapor-kullanici').value,projeId:document.getElementById('rapor-proje').value});
   if(!r) return;
   document.getElementById('rapor-result').classList.remove('hidden');
@@ -850,26 +729,40 @@ async function loadRapor() {
   renderBarChart('r-birim',r.birimOzet,r.toplamDakika);
   renderBarChart('r-kullanici',r.kullaniciOzet,r.toplamDakika);
   renderBarChart('r-proje',r.projeOzet,r.toplamDakika,true);
-  const det=r.detay.sort((a,b)=>new Date(b.Baslangic)-new Date(a.Baslangic));
-  document.getElementById('r-detay').innerHTML=det.map(l=>`<tr>
+  document.getElementById('r-detay').innerHTML=r.detay.sort((a,b)=>new Date(b.Baslangic)-new Date(a.Baslangic)).map(l=>`<tr>
     <td>${l.Baslangic?new Date(l.Baslangic).toLocaleString('tr-TR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'-'}</td>
-    <td>${l.KullaniciAd}</td><td>${l.ProjeAd}</td><td>${l.BirimAd}</td><td>${l.Baslik}</td><td>${formatSure(l.SureDakika)}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-sec)">Kayıt yok.</td></tr>';
+    <td>${l.KullaniciAd}</td><td>${l.ProjeAd}</td><td>${l.BirimAd}</td><td>${l.Baslik}</td><td>${formatSure(l.SureDakika)}</td></tr>`).join('')
+    ||'<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-sec)">Kayıt yok.</td></tr>';
 }
 function renderBarChart(cid,data,toplam,wide=false){
-  const c=document.getElementById(cid);
-  const s=Object.entries(data).sort((a,b)=>b[1]-a[1]);
-  c.innerHTML=s.length===0?'<p style="color:var(--text-sec);font-size:13px">Veri yok.</p>':s.map(([l,v])=>`
+  document.getElementById(cid).innerHTML=Object.entries(data).sort((a,b)=>b[1]-a[1]).map(([l,v])=>`
     <div class="rapor-bar">
       <div class="rapor-bar-label" style="min-width:${wide?200:140}px">${l}</div>
       <div class="rapor-bar-track"><div class="rapor-bar-fill" style="width:${toplam?Math.round(v/toplam*100):0}%"></div></div>
-      <div class="rapor-bar-val">${formatSure(v)}</div>
-    </div>`).join('');
+      <div class="rapor-bar-val">${formatSure(v)}</div></div>`).join('')
+    ||'<p style="color:var(--text-sec);font-size:13px">Veri yok.</p>';
 }
+
+// ============================================================
+// DROPDOWN YARDIMCI
+// ============================================================
+function populateBirimSelect(id, withEmpty=true){
+  const sel=document.getElementById(id); if(!sel) return;
+  const val=sel.value;
+  sel.innerHTML=withEmpty?'<option value="">-- Seçin --</option>':'';
+  cache.birimler.forEach(b=>{const o=document.createElement('option');o.value=b.ID;o.textContent=b.Ad;if(b.ID==val)o.selected=true;sel.appendChild(o);});
+}
+function populateSelect(id, emptyHtml, items, valFn, txtFn){
+  const sel=document.getElementById(id); if(!sel) return;
+  const val=sel.value;
+  sel.innerHTML=emptyHtml;
+  items.forEach(item=>{const o=document.createElement('option');o.value=valFn(item);o.textContent=txtFn(item);if(valFn(item)==val)o.selected=true;sel.appendChild(o);});
+}
+function populateAllDropdowns(){populateLogDropdowns();populateBirimSelect('proje-birim');populateRaporDropdowns();}
 
 // ============================================================
 // YARDIMCI
 // ============================================================
-function populateAllDropdowns() { populateLogDropdowns(); populateProjeBirim(); populateRaporDropdowns(); }
 function formatSure(d){if(!d||d<=0)return'0 dk';const s=parseInt(d),h=Math.floor(s/60),m=s%60;return h>0?`${h}s ${m}dk`:`${m} dk`;}
 function setNow(id){const n=new Date();n.setSeconds(0,0);document.getElementById(id).value=n.toISOString().slice(0,16);}
 </script>
