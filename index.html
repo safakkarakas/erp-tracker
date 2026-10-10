@@ -116,7 +116,7 @@ tr:hover td { background: #f9fafb; }
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h2>ERP Birimi<br>İş Takip</h2>
-    <p>v1.1</p>
+    <p>v1.2</p>
   </div>
   <div class="nav-section">Ana Menü</div>
   <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
@@ -125,7 +125,7 @@ tr:hover td { background: #f9fafb; }
   <div class="nav-item" onclick="showPage('rapor')"><span class="icon">📈</span> Raporlama</div>
   <div class="nav-section">Tanımlar</div>
   <div class="nav-item" onclick="showPage('birimler')"><span class="icon">🏢</span> Birimler</div>
-  <div class="nav-item" onclick="showPage('personel')"><span class="icon">👤</span> Personel</div>
+  <div class="nav-item" onclick="showPage('personel')"><span class="icon">👤</span> Kullanıcılar</div>
   <div class="nav-section">Ayarlar</div>
   <div class="nav-item" onclick="showPage('ayarlar')"><span class="icon">⚙️</span> API Ayarları</div>
 </aside>
@@ -155,9 +155,9 @@ tr:hover td { background: #f9fafb; }
       <div class="card">
         <div class="card-title">👤 Aktif Kullanıcı</div>
         <div class="form-group" style="max-width:400px">
-          <label>Bu cihazda çalışan personeli seçin</label>
+          <label>Bu cihazda çalışan kullanıcıyı seçin</label>
           <select id="active-personel-select" onchange="saveActivePersonel()">
-            <option value="">-- Personel Seçin --</option>
+            <option value="">-- Kullanıcı Seçin --</option>
           </select>
         </div>
       </div>
@@ -174,7 +174,7 @@ tr:hover td { background: #f9fafb; }
         <div class="card-title">📋 Son Loglar (Bu hafta)</div>
         <div class="table-wrap">
           <table id="son-loglar-table">
-            <thead><tr><th>Tarih</th><th>Personel</th><th>Proje/Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
+            <thead><tr><th>Tarih</th><th>Kullanıcı</th><th>Proje/Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
             <tbody id="son-loglar-body"></tbody>
           </table>
         </div>
@@ -187,7 +187,7 @@ tr:hover td { background: #f9fafb; }
         <div class="card-title">➕ Yeni İş Logu Ekle</div>
         <div class="form-grid cols3">
           <div class="form-group">
-            <label>Personel *</label>
+            <label>Kullanıcı *</label>
             <select id="log-personel"></select>
           </div>
           <div class="form-group">
@@ -226,7 +226,7 @@ tr:hover td { background: #f9fafb; }
           <span>📋 Tüm Loglar</span>
           <div class="section-actions">
             <select id="filter-personel" onchange="loadLoglar()" style="font-size:12px;padding:4px 8px">
-              <option value="">Tüm Personel</option>
+              <option value="">Tüm Kullanıcılar</option>
             </select>
             <select id="filter-proje" onchange="loadLoglar()" style="font-size:12px;padding:4px 8px">
               <option value="">Tüm Projeler</option>
@@ -235,7 +235,7 @@ tr:hover td { background: #f9fafb; }
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Tarih</th><th>Personel</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead>
+            <thead><tr><th>Tarih</th><th>Kullanıcı</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead>
             <tbody id="log-table-body"></tbody>
           </table>
         </div>
@@ -308,7 +308,7 @@ tr:hover td { background: #f9fafb; }
             <select id="rapor-birim"><option value="">Tümü</option></select>
           </div>
           <div class="form-group">
-            <label>Personel</label>
+            <label>Kullanıcı</label>
             <select id="rapor-personel"><option value="">Tümü</option></select>
           </div>
           <div class="form-group">
@@ -329,7 +329,7 @@ tr:hover td { background: #f9fafb; }
             <div id="rapor-birim-chart"></div>
           </div>
           <div class="card">
-            <div class="card-title">👤 Personel Bazlı Süre</div>
+            <div class="card-title">👤 Kullanıcı Bazlı Süre</div>
             <div id="rapor-personel-chart"></div>
           </div>
         </div>
@@ -341,7 +341,7 @@ tr:hover td { background: #f9fafb; }
           <div class="card-title">📋 Detay Listesi</div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Tarih</th><th>Personel</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
+              <thead><tr><th>Tarih</th><th>Kullanıcı</th><th>Proje</th><th>Birim</th><th>Başlık</th><th>Süre</th></tr></thead>
               <tbody id="rapor-detay-body"></tbody>
             </table>
           </div>
@@ -381,7 +381,7 @@ tr:hover td { background: #f9fafb; }
     <!-- PERSONEL -->
     <div id="page-personel" class="hidden">
       <div class="card">
-        <div class="card-title">➕ Yeni Personel Ekle</div>
+        <div class="card-title">➕ Yeni Kullanıcı Ekle</div>
         <div class="form-grid cols3">
           <div class="form-group">
             <label>Ad *</label>
@@ -397,11 +397,11 @@ tr:hover td { background: #f9fafb; }
           </div>
         </div>
         <div style="margin-top:12px">
-          <button class="btn btn-primary" onclick="addPersonel()">💾 Personeli Kaydet</button>
+          <button class="btn btn-primary" onclick="addPersonel()">💾 Kullanıcıyı Kaydet</button>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">👤 Personel Listesi</div>
+        <div class="card-title">👤 Kullanıcı Listesi</div>
         <div class="table-wrap">
           <table>
             <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>İşlem</th></tr></thead>
@@ -468,7 +468,7 @@ async function api(params) {
 // NAVIGATION
 // ============================================================
 const pages = ['dashboard','log','projeler','rapor','birimler','personel','ayarlar'];
-const titles = { dashboard:'Dashboard', log:'İş Logu', projeler:'Projeler', rapor:'Raporlama', birimler:'Birim Tanımları', personel:'Personel', ayarlar:'API Ayarları' };
+const titles = { dashboard:'Dashboard', log:'İş Logu', projeler:'Projeler', rapor:'Raporlama', birimler:'Birim Tanımları', personel:'Kullanıcılar', ayarlar:'API Ayarları' };
 
 function showPage(name) {
   pages.forEach(p => { document.getElementById('page-' + p).classList.add('hidden'); });
@@ -520,7 +520,7 @@ function updateActiveUserDisplay() {
 
 function loadPersonelToActiveSelect() {
   const sel = document.getElementById('active-personel-select');
-  sel.innerHTML = '<option value="">-- Personel Seçin --</option>';
+  sel.innerHTML = '<option value="">-- Kullanıcı Seçin --</option>';
   cache.personel.forEach(p => {
     const opt = document.createElement('option');
     opt.value = p.ID; opt.textContent = p.Ad + ' ' + p.Soyad;
@@ -583,7 +583,7 @@ async function addPersonel() {
   if (!ad || !soyad) return showAlert('Ad ve soyad zorunlu.', 'error');
   const res = await api({ action: 'addPersonel', ad, soyad, email: document.getElementById('personel-email').value });
   if (res) {
-    showAlert('Personel eklendi.');
+    showAlert('Kullanıcı eklendi.');
     ['personel-ad','personel-soyad','personel-email'].forEach(id => document.getElementById(id).value = '');
     await loadPersonel();
     renderPersonel();
@@ -594,13 +594,13 @@ async function addPersonel() {
 async function deletePersonel(id) {
   if (!confirm('Bu personeli silmek istediğinize emin misiniz?')) return;
   const res = await api({ action: 'deletePersonel', id });
-  if (res) { showAlert('Personel silindi.'); await loadPersonel(); renderPersonel(); populateDropdowns(); }
+  if (res) { showAlert('Kullanıcı silindi.'); await loadPersonel(); renderPersonel(); populateDropdowns(); }
 }
 
 function renderPersonel() {
   const tbody = document.getElementById('personel-table-body');
   tbody.innerHTML = cache.personel.length === 0
-    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz personel eklenmemiş.</td></tr>'
+    ? '<tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
     : cache.personel.map(p => `<tr>
         <td><code style="font-size:11px">${p.ID}</code></td>
         <td><strong>${p.Ad} ${p.Soyad}</strong></td>
@@ -741,7 +741,7 @@ async function addLog() {
   const birimId = document.getElementById('log-birim').value;
   const projeId = document.getElementById('log-proje').value;
 
-  if (!personelId) return showAlert('Personel seçimi zorunlu.', 'error');
+  if (!personelId) return showAlert('Kullanıcı seçimi zorunlu.', 'error');
   if (!baslik) return showAlert('Başlık zorunlu.', 'error');
   if (!baslangic) return showAlert('Başlangıç zamanı zorunlu.', 'error');
   if (!projeId && !birimId) return showAlert('Proje veya birim seçiniz.', 'error');
@@ -878,7 +878,7 @@ async function loadRapor() {
     <div class="stat"><div class="stat-val">${data.toplamKayit}</div><div class="stat-lbl">Toplam Kayıt</div></div>
     <div class="stat"><div class="stat-val">${formatSure(data.toplamDakika)}</div><div class="stat-lbl">Toplam Süre</div></div>
     <div class="stat"><div class="stat-val">${Object.keys(data.birimOzet).length}</div><div class="stat-lbl">Birim Sayısı</div></div>
-    <div class="stat"><div class="stat-val">${Object.keys(data.personelOzet).length}</div><div class="stat-lbl">Personel Sayısı</div></div>
+    <div class="stat"><div class="stat-val">${Object.keys(data.personelOzet).length}</div><div class="stat-lbl">Kullanıcı Sayısı</div></div>
   `;
 
   renderBarChart('rapor-birim-chart', data.birimOzet, data.toplamDakika);
