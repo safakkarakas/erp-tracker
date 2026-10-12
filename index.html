@@ -116,7 +116,7 @@ tr:hover td { background: #f9fafb; }
 <aside class="sidebar">
   <div class="sidebar-logo">
     <h2>ERP Birimi<br>İş Takip</h2>
-    <p>v1.3</p>
+    <p>v1.4</p>
   </div>
   <div class="nav-section">Ana Menü</div>
   <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
@@ -411,7 +411,7 @@ tr:hover td { background: #f9fafb; }
         <div class="card-title">👤 Kullanıcı Listesi</div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>Yetki</th><th>İşlem</th></tr></thead>
+            <thead><tr><th>ID</th><th>Ad Soyad</th><th>E-posta</th><th>Yetki</th><th>İşlem</th><th></th></tr></thead>
             <tbody id="personel-table-body"></tbody>
           </table>
         </div>
@@ -609,14 +609,51 @@ async function deletePersonel(id) {
 function renderPersonel() {
   const tbody = document.getElementById('personel-table-body');
   tbody.innerHTML = cache.personel.length === 0
-    ? '<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
-    : cache.personel.map(p => `<tr>
+    ? '<tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:24px">Henüz kullanıcı eklenmemiş.</td></tr>'
+    : cache.personel.map(p => `<tr id="row-${p.ID}">
         <td><code style="font-size:11px">${p.ID}</code></td>
         <td><strong>${p.Ad} ${p.Soyad}</strong></td>
         <td>${p.Email || '-'}</td>
         <td><span class="badge ${p.Rol === 'Yonetici' ? 'badge-blue' : 'badge-gray'}">${p.Rol === 'Yonetici' ? 'Yönetici' : 'Normal'}</span></td>
+        <td><button class="btn btn-outline btn-sm" onclick="editPersonel('${p.ID}')">✏️ Düzenle</button></td>
         <td><button class="btn btn-danger btn-sm" onclick="deletePersonel('${p.ID}')">🗑 Sil</button></td>
       </tr>`).join('');
+}
+
+function editPersonel(id) {
+  const p = cache.personel.find(x => x.ID === id);
+  if (!p) return;
+  const row = document.getElementById('row-' + id);
+  row.innerHTML = `
+    <td><code style="font-size:11px">${p.ID}</code></td>
+    <td>
+      <input type="text" id="edit-ad-${id}" value="${p.Ad}" style="width:80px;margin-right:4px" />
+      <input type="text" id="edit-soyad-${id}" value="${p.Soyad}" style="width:80px" />
+    </td>
+    <td><input type="email" id="edit-email-${id}" value="${p.Email || ''}" style="width:140px" /></td>
+    <td>
+      <select id="edit-rol-${id}" style="font-size:12px;padding:4px 6px">
+        <option value="Normal" ${p.Rol !== 'Yonetici' ? 'selected' : ''}>Normal</option>
+        <option value="Yonetici" ${p.Rol === 'Yonetici' ? 'selected' : ''}>Yönetici</option>
+      </select>
+    </td>
+    <td><button class="btn btn-primary btn-sm" onclick="savePersonel('${id}')">💾 Kaydet</button></td>
+    <td><button class="btn btn-outline btn-sm" onclick="renderPersonel()">İptal</button></td>
+  `;
+}
+
+async function savePersonel(id) {
+  const ad    = document.getElementById('edit-ad-' + id).value.trim();
+  const soyad = document.getElementById('edit-soyad-' + id).value.trim();
+  const email = document.getElementById('edit-email-' + id).value.trim();
+  const rol   = document.getElementById('edit-rol-' + id).value;
+  if (!ad || !soyad) return showAlert('Ad ve soyad zorunlu.', 'error');
+  const res = await api({ action: 'updatePersonel', id, ad, soyad, email, rol });
+  if (res) {
+    showAlert('Kullanıcı güncellendi.');
+    await loadPersonel();
+    renderPersonel();
+  }
 }
 
 // ============================================================
